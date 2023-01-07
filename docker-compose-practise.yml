@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  server:
+    build: ./docker_practice
+    command: npm run start
+    ports:
+      - "5050:5050"
+    environment:
+#      server_db - name of server
+#      server - name of db
+      - MONGO_URL=mongodb://server_db:27017/server
+    depends_on:
+      - server_db
+
+  server_db:
+    image: mongo:latest
+
