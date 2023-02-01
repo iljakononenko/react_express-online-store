@@ -27,41 +27,48 @@ class ItemController {
 
             return res.json(shopItem)
         } catch (err) {
-            next(ApiError.badRequest(err.message))
+            return next(ApiError.badRequest(err.message))
         }
     }
 
     async getAll(req, res) {
-        let {brandId, typeId, limit, page} = req.query
-        page = page || 1;
-        limit = limit || 9;
-        let offset = page * limit - limit;
-        let items;
-        if (!brandId && !typeId) {
-            items = await ShopItem.findAndCountAll({limit, offset});
+        try {
+            let {brandId, typeId, limit, page} = req.query
+            page = page || 1;
+            limit = limit || 9;
+            let offset = page * limit - limit;
+            let items;
+            if (!brandId && !typeId) {
+                items = await ShopItem.findAndCountAll({limit, offset});
+            }
+            if (brandId && !typeId) {
+                items = await ShopItem.findAndCountAll({where: {brandId}, limit, offset});
+            }
+            if (!brandId && typeId) {
+                items = await ShopItem.findAndCountAll({where: {typeId}, limit, offset});
+            }
+            if (brandId && typeId) {
+                items = await ShopItem.findAndCountAll({where: {typeId, brandId}, limit, offset});
+            }
+            return res.json(items)
+        } catch (err) {
+            console.log(err)
         }
-        if (brandId && !typeId) {
-            items = await ShopItem.findAndCountAll({where: {brandId}, limit, offset});
-        }
-        if (!brandId && typeId) {
-            items = await ShopItem.findAndCountAll({where: {typeId}, limit, offset});
-        }
-        if (brandId && typeId) {
-            items = await ShopItem.findAndCountAll({where: {typeId, brandId}, limit, offset});
-        }
-        return res.json(items)
     }
 
     async getOne(req, res) {
-        const {id} = req.params
-        const item = await ShopItem.findOne(
-            {
-                where: {id},
-                include: [{model: ItemInfo, as: "info" }]
-            },
-        )
-        return res.json(item)
-
+        try {
+            const {id} = req.params
+            const item = await ShopItem.findOne(
+                {
+                    where: {id},
+                    include: [{model: ItemInfo, as: "info" }]
+                },
+            )
+            return res.json(item)
+        } catch (err) {
+            console.log(err)
+        }
     }
 }
 

@@ -18,3 +18,23 @@ export const check = async () => {
     localStorage.setItem('token', data.token)
     return jwt_decode(data.token);
 }
+
+export const getAllOrders = async () => {
+    const {data} = await $authHost.get('api/order/')
+    return data;
+}
+
+export const getUserdata = async () => {
+    const {data} = await $authHost.get('/api/user/data')
+    return data;
+}
+
+export const changePassword = async (password, newPassword) => {
+    const {data} = await $authHost.post('/api/user/changePassword', {password, newPassword})
+    return data;
+}
+
+export const changeUserData = async (userData) => {
+    const {data} = await $authHost.post('/api/user/changeUserData', {userData})
+    return data;
+}

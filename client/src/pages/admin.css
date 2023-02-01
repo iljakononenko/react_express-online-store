@@ -1,0 +1,11 @@
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar .nav-link svg {
+    margin-right: 6px;
+}
