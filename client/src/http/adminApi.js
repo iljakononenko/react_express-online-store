@@ -1,8 +1,8 @@
 import {$authHost, $host} from "./index";
 import jwt_decode from "jwt-decode";
 
-export const createSite = async (pages) => {
-    const {data} = await $host.post('api/admin/create', {pages})
+export const createSite = async (siteName, pages) => {
+    const {data} = await $host.post('api/admin/create', {siteName, pages})
     return data;
 }
 

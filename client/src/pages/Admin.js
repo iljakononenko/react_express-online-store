@@ -7,7 +7,11 @@ import {observer} from "mobx-react-lite";
 import {Context} from "../index";
 import NavBar from "../components/NavBar";
 import "./admin.css"
-import {FaFile, FaHome, FaListUl, FaUsers} from "react-icons/fa";
+import {FaColumns, FaFile, FaHome, FaListUl, FaTools, FaUsers} from "react-icons/fa";
+import NavBar_admin from "../components/NavBar_admin";
+import {NavLink} from "react-router-dom";
+import {ADMIN_ROUTE, EDITOR_ROUTE} from "../utils/consts";
+import Sidebar_admin from "../components/Sidebar_admin";
 
 const Admin = observer(() => {
 
@@ -17,40 +21,10 @@ const Admin = observer(() => {
 
     return (
         <>
-            <NavBar />
+            <NavBar_admin siteName={"ProdSell"} />
 
             <div className={'d-flex h-100'}>
-                <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-                    <div className="position-sticky pt-3 sidebar-sticky">
-                        <ul className="nav flex-column">
-                            <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="#">
-                                    <FaHome />
-                                    Dashboard
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">
-                                    <FaFile />
-                                    Orders
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">
-                                    <FaListUl />
-                                    Products
-                                </a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">
-                                    <FaUsers />
-                                    Customers
-                                </a>
-                            </li>
-                        </ul>
-
-                    </div>
-                </nav>
+                <Sidebar_admin />
 
             </div>
 

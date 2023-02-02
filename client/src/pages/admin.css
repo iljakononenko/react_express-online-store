@@ -9,3 +9,7 @@
 .sidebar .nav-link svg {
     margin-right: 6px;
 }
+
+.sidebar .nav-link.active {
+    color: #2470dc;
+}

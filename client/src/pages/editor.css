@@ -1,0 +1,13 @@
+.site-variant {
+    height: 140px;
+    padding: 24px;
+    border: 1px solid #ddd;
+    transition: background-color ease-in-out 0.2s;
+}
+
+.site-variant.selected,
+.site-variant:hover {
+    border: 1px solid #2470dc;
+    color: #2470dc;
+    background-color: #f0f2f5;
+}
