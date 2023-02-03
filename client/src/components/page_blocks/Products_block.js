@@ -1,9 +1,9 @@
 import React, {useContext} from 'react';
 import {Col, Container} from "react-bootstrap";
-import TypeBar from "../TypeBar";
-import BrandBar from "../BrandBar";
-import ItemList from "../ItemList";
-import Pages from "../Pages";
+import TypeBar from "../Shop/TypeBar";
+import BrandBar from "../Shop/BrandBar";
+import ItemList from "../Shop/ItemList";
+import Pages from "../Shop/Pages";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 

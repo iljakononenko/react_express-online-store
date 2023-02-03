@@ -38,7 +38,7 @@ const ShopItem = sequelize.define('shop_item', {
     name: {type: DataTypes.STRING, unique: true},
     price: {type: DataTypes.INTEGER, allowNull: false},
     rating: {type: DataTypes.INTEGER, defaultValue: 0},
-    img: {type: DataTypes.STRING, unique: true, allowNull: false},
+    img: {type: DataTypes.STRING, allowNull: false},
 })
 
 const Type = sequelize.define('type', {
@@ -69,7 +69,9 @@ const TypeBrand = sequelize.define('type_brand', {
 const ServiceWebSites = sequelize.define('service_web_sites', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     system_id: {type: DataTypes.INTEGER},
-    pages: {type: DataTypes.TEXT}
+    pages: {type: DataTypes.TEXT},
+    name: {type: DataTypes.STRING},
+    layout_type_id: {type: DataTypes.INTEGER}
 })
 
 const Order = sequelize.define('order', {

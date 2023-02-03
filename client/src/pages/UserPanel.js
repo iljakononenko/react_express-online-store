@@ -1,12 +1,12 @@
 import React, {useContext, useState} from 'react';
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBars/NavBar";
 import {Badge, Button, Card, Col, Container, Image, ListGroup, Table} from "react-bootstrap";
 import itemImg from "../assets/iphone.jpg";
 import bigStar from "../assets/bigStar.png";
 import {Context} from "../index";
 import {FaCaretDown, FaCaretUp} from "react-icons/fa";
-import UserOrders from "../components/UserOrders";
-import UserData from "../components/UserData";
+import UserOrders from "../components/UserPanel/UserOrders";
+import UserData from "../components/UserPanel/UserData";
 import FooterBlock from "../components/page_blocks/Footer_block";
 
 const UserPanel = () => {

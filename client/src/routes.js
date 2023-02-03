@@ -7,7 +7,7 @@ import {
     REGISTRATION_ROUTE,
     SHOP_ROUTE,
     EDITOR_ROUTE,
-    USER_PANEL_ROUTE
+    USER_PANEL_ROUTE, MANAGER_ROUTE
 } from "./utils/consts";
 import Cart from "./pages/Cart";
 import Shop from "./pages/Shop";
@@ -16,7 +16,7 @@ import ItemPage from "./pages/ItemPage";
 import SiteEditor from "./components/SiteEditor";
 import Registration from "./pages/Registration";
 import UserPanel from "./pages/UserPanel";
-import Editor from "./pages/Editor";
+import SiteManager from "./pages/SiteManager";
 
 export const authRoutes = [
     {
@@ -35,8 +35,8 @@ export const authRoutes = [
 
 export const publicRoutes = [
     {
-        path: EDITOR_ROUTE,
-        Component: Editor
+        path: MANAGER_ROUTE,
+        Component: SiteManager
     },
     {
         path: EDITOR_ROUTE + "/:id",

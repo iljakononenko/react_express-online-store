@@ -1,9 +1,9 @@
 import React from 'react';
 import {Card, Col, Image} from "react-bootstrap";
-import star from "../assets/star.png"
+import star from "../../assets/star.png"
 import {useHistory} from "react-router-dom";
-import {ITEM_ROUTE} from "../utils/consts";
-import itemImg from "../assets/iphone.jpg"
+import {ITEM_ROUTE} from "../../utils/consts";
+import itemImg from "../../assets/iphone.jpg"
 
 const ItemCard = ({item, isDev = false}) => {
 

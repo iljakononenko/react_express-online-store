@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import AddressData from "./AddressData";
-import {changePassword, changeUserData, getUserdata} from "../http/userApi";
+import AddressData from "../AddressData";
+import {changePassword, changeUserData, getUserdata} from "../../http/userApi";
 
 const UserData = () => {
 

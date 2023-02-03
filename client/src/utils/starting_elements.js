@@ -91,3 +91,38 @@ export const shop_starting_elements = [
         ]
     }
 ]
+
+export const single_page_starting_elements = [
+    {
+        "pageId": uuid.v4(),
+        "pageName": "Landing",
+        "components": [
+            {
+                "key": uuid.v4(),
+                "component_id": 0,
+                "component_name": "Header"
+            },
+            {
+                "key": uuid.v4(),
+                "component_id": 1,
+                "component_name": "Slider"
+            },
+            {
+                "key": uuid.v4(),
+                "component_id": 2,
+                "component_name": "Products"
+            },
+            {
+                "key": uuid.v4(),
+                "component_id": 1,
+                "component_name": "New Block"
+            },
+            {
+                "key": uuid.v4(),
+                "component_id": 1,
+                "component_name": "New Block"
+            }
+        ]
+    }
+]
+

@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react';
 import "../editor.css"
 import {getBasicBlock} from "../utils/components_map";
 import {FaAngleLeft, FaPlus, FaRegTrashAlt} from 'react-icons/fa';
-import NavBar_adminEditor from "./NavBar_adminEditor";
+import NavBar_adminEditor from "./NavBars/NavBar_adminEditor";
 import {createSite, editSite, fetchOneSite} from "../http/adminApi";
 import {AiOutlinePlus} from "react-icons/ai";
 import {useParams} from "react-router-dom";
 import {shop_starting_elements} from "../utils/starting_elements";
+import AddBlock from "./modals/AddBlock";
 const uuid = require('uuid')
 
 const SiteEditor = () => {
@@ -28,6 +29,21 @@ const SiteEditor = () => {
     };
 
     const [reload, setReload] = useState(0);
+
+    const [newBlockModalOpen, setNewBlockModalOpen] = useState(false);
+
+    const openNewBlockModal = () => {
+        setNewBlockModalOpen(true)
+    }
+
+    const closeNewBlockModal = () => {
+        setNewBlockModalOpen(false)
+    }
+
+    const submitBlock = (block_id) => {
+        addBlock(block_id)
+        closeNewBlockModal()
+    }
 
     const [pages, setPages] = useState([]);
 
@@ -161,12 +177,13 @@ const SiteEditor = () => {
 
     return (
         <>
+            <AddBlock show={newBlockModalOpen} onHide={closeNewBlockModal} submitBlock={submitBlock} />
             <NavBar_adminEditor saveChanges={saveChanges} resetChanges={resetChanges} />
-            <div style={true ? {display: "flex", justifyContent: "end", height: "100%"} : {}} >
+            <div style={true ? {display: "flex", justifyContent: "end", minHeight: "100%"} : {}} >
                 <div style={{ background: "#2e383e", padding: "10px 20px", minWidth: "300px" }}>
                     <div className="btn-group" style={{ display: "block", padding: "10px 0", textAlign: "center", marginBottom: "10px" }}>
                         <button type="button" className="btn btn-warning no-radius d-inline-flex align-items-center" onClick={
-                            isEditingPage ?() => { addPage() } : () => { addBlock(1) }
+                            isEditingPage ?() => { addPage() } : () => { openNewBlockModal() }
                         }>
                             <span>Add {isEditingPage ? "Page" : "Block"} </span><span style={{ paddingLeft: "6px" }}><AiOutlinePlus style={{ display: "block" }} /></span>
                         </button>

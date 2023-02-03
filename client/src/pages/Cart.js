@@ -1,14 +1,14 @@
 import React, {useContext, useEffect, useState} from 'react';
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBars/NavBar";
 import itemImg from "../assets/iphone.jpg";
 import {Button, Col, Container} from "react-bootstrap";
 import {FaCaretLeft, FaCaretRight, FaRegTrashAlt} from "react-icons/fa";
 import FooterBlock from "../components/page_blocks/Footer_block";
 import "./cart.css"
-import CartFirstBlock from "../components/page_blocks/Cart_first_block";
-import CartSecondBlock from "../components/page_blocks/Cart_second_block";
-import CartHeader from "../components/page_blocks/Cart_header";
-import CartLastBlock from "../components/page_blocks/Cart_last_block";
+import CartFirstBlock from "../components/Cart/Cart_first_block";
+import CartSecondBlock from "../components/Cart/Cart_second_block";
+import CartHeader from "../components/Cart/Cart_header";
+import CartLastBlock from "../components/Cart/Cart_last_block";
 import {getCartItems} from "../http/cartApi";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";

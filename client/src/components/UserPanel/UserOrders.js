@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Badge, Col} from "react-bootstrap";
-import itemImg from "../assets/iphone.jpg";
+import itemImg from "../../assets/iphone.jpg";
 import {FaCaretDown, FaCaretUp} from "react-icons/fa";
-import {getAllOrders} from "../http/userApi";
+import {getAllOrders} from "../../http/userApi";
 
 const UserOrders = () => {
 

@@ -4,7 +4,7 @@ import bigStar from '../assets/bigStar.png';
 import itemImg from '../assets/iphone.jpg';
 import {useHistory, useParams} from "react-router-dom";
 import {fetchOneItem} from "../http/itemApi";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBars/NavBar";
 import {login} from "../http/userApi";
 import {CART_ROUTE, SHOP_ROUTE} from "../utils/consts";
 import {addItemToCart} from "../http/cartApi";

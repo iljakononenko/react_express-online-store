@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Container, Nav, Navbar, NavDropdown} from "react-bootstrap";
 import {NavLink, useHistory} from "react-router-dom";
-import {ADMIN_ROUTE, EDITOR_ROUTE, SHOP_ROUTE} from "../utils/consts";
+import {ADMIN_ROUTE, EDITOR_ROUTE, MANAGER_ROUTE, SHOP_ROUTE} from "../../utils/consts";
 import {FaAngleRight, FaArrowRight, FaCaretRight} from "react-icons/fa";
 
 const NavBarAdmin = ({siteName}) => {
@@ -11,7 +11,7 @@ const NavBarAdmin = ({siteName}) => {
     return (
         <Navbar bg="dark" variant="dark" style={{minHeight: '54px'}}>
             <Container className={'d-flex align-self-center justify-content-start'}>
-                <NavLink style={{color: "white", textDecoration: "none"}} to={EDITOR_ROUTE}>Websites</NavLink>
+                <NavLink style={{color: "white", textDecoration: "none"}} to={MANAGER_ROUTE}>Websites</NavLink>
 
 
 

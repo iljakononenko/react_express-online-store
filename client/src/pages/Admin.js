@@ -5,10 +5,10 @@ import CreateType from "../components/modals/CreateType";
 import CreateItem from "../components/modals/CreateItem";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBars/NavBar";
 import "./admin.css"
 import {FaColumns, FaFile, FaHome, FaListUl, FaTools, FaUsers} from "react-icons/fa";
-import NavBar_admin from "../components/NavBar_admin";
+import NavBar_admin from "../components/NavBars/NavBar_admin";
 import {NavLink} from "react-router-dom";
 import {ADMIN_ROUTE, EDITOR_ROUTE} from "../utils/consts";
 import Sidebar_admin from "../components/Sidebar_admin";

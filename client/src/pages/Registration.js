@@ -5,7 +5,7 @@ import {LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE} from "../utils/consts";
 import {login, registration} from "../http/userApi";
 import {observer} from "mobx-react-lite";
 import {Context} from "../index";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/NavBars/NavBar";
 import Auth_block from "../components/page_blocks/Auth_block";
 import Registration_block from "../components/page_blocks/Registration_block";
 
