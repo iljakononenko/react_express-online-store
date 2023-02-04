@@ -24,10 +24,6 @@ export const authRoutes = [
         Component: UserPanel
     },
     {
-        path: ADMIN_ROUTE,
-        Component: Admin
-    },
-    {
         path: CART_ROUTE,
         Component: Cart
     },
@@ -37,6 +33,10 @@ export const publicRoutes = [
     {
         path: MANAGER_ROUTE,
         Component: SiteManager
+    },
+    {
+        path: ADMIN_ROUTE,
+        Component: Admin
     },
     {
         path: EDITOR_ROUTE + "/:id",

@@ -58,6 +58,8 @@ class ItemController {
 
     async getOne(req, res) {
         try {
+            console.log(req.hostname)
+            console.log(req.get('origin'))
             const {id} = req.params
             const item = await ShopItem.findOne(
                 {
