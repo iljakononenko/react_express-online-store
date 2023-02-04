@@ -46,7 +46,10 @@ async function initializeStartingValues() {
 
     const existing_user = await User.findOne({where: {id: 1}});
 
+    console.log(existing_user)
+
     if (!existing_user) {
+        console.log('creating data')
         const hashPassword = await bcrypt.hash("test123", 5);
         const user = await User.create({email: "test@test.com", password: hashPassword, role: "ADMIN"})
         const cart = await Cart.create({userId: user.id})
