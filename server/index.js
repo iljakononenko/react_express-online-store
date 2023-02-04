@@ -46,7 +46,8 @@ async function initializeStartingValues() {
 
     const existing_user = await User.findOne({where: {id: 1}});
 
-    console.log(existing_user)
+    console.log("existing_user is null:")
+    console.log(existing_user == null)
 
     if (!existing_user) {
         console.log('creating data')
