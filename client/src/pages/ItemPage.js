@@ -2,11 +2,11 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Button, Card, Col, Container, Image} from "react-bootstrap";
 import bigStar from '../assets/bigStar.png';
 import itemImg from '../assets/iphone.jpg';
-import {useHistory, useParams} from "react-router-dom";
+import {useHistory, useLocation, useParams} from "react-router-dom";
 import {fetchOneItem} from "../http/itemApi";
 import NavBar from "../components/NavBars/NavBar";
 import {login} from "../http/userApi";
-import {CART_ROUTE, SHOP_ROUTE} from "../utils/consts";
+import {CART_ROUTE, EDITOR_ROUTE, SHOP_ROUTE} from "../utils/consts";
 import {addItemToCart} from "../http/cartApi";
 import {Context} from "../index";
 import {observer} from "mobx-react-lite";
@@ -18,7 +18,9 @@ const ItemPage = observer(() => {
     const {user} = useContext(Context)
     const history = useHistory();
 
-    console.log(user)
+    const location = useLocation();
+    const isRealPage = !location.pathname.includes(EDITOR_ROUTE);
+
 
     useEffect(() => {
         if (id != null && id !== undefined) {
@@ -27,11 +29,13 @@ const ItemPage = observer(() => {
     }, [])
 
     const addToCart = async () => {
-        try {
-            let result = await addItemToCart(id);
-            history.push(CART_ROUTE)
-        } catch (e) {
-            alert(e.response.data.message)
+        if (isRealPage) {
+            try {
+                let result = await addItemToCart(id);
+                history.push(CART_ROUTE)
+            } catch (e) {
+                alert(e.response.data.message)
+            }
         }
     }
 

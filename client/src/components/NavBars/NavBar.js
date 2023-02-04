@@ -1,7 +1,15 @@
 import React, {useContext} from 'react';
 import {Context} from "../../index";
-import {NavLink, useHistory} from "react-router-dom";
-import {ADMIN_ROUTE, CART_ROUTE, LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE, USER_PANEL_ROUTE} from "../../utils/consts";
+import {NavLink, useHistory, useLocation} from "react-router-dom";
+import {
+    ADMIN_ROUTE,
+    CART_ROUTE,
+    EDITOR_ROUTE,
+    LOGIN_ROUTE,
+    REGISTRATION_ROUTE,
+    SHOP_ROUTE,
+    USER_PANEL_ROUTE
+} from "../../utils/consts";
 import {Button, Container, Dropdown, DropdownButton, Nav, NavDropdown} from "react-bootstrap";
 import {Navbar} from "react-bootstrap";
 import {observer} from "mobx-react-lite";
@@ -12,15 +20,20 @@ const NavBar = observer(( {props} ) => {
     const {user} = useContext(Context)
     const history = useHistory()
 
+    const location = useLocation();
+    const isRealPage = !location.pathname.includes(EDITOR_ROUTE);
+
     const logOut = () => {
-        user.setIsAuth(false)
-        user.setUser({})
+        if (isRealPage) {
+            user.setIsAuth(false)
+            user.setUser({})
+        }
     }
 
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
-                <NavLink style={{color: "white", textDecoration: "none"}} to={SHOP_ROUTE}>ProdSell</NavLink>
+                <NavLink style={{color: "white", textDecoration: "none"}} to={ isRealPage ? SHOP_ROUTE : "#"}>ProdSell</NavLink>
                 {user.isAuth ?
                     <div className={'d-flex align-items-center'}>
                         <p className={'mb-0 text-white me-2'}>Hello, Illia Kononenko!</p>
@@ -34,13 +47,13 @@ const NavBar = observer(( {props} ) => {
                                 >
                                     <NavDropdown.Item
                                         className={'d-flex align-items-center justify-content-between'}
-                                        onClick={() => history.push(USER_PANEL_ROUTE)}>
+                                        onClick={ isRealPage ? () => history.push(USER_PANEL_ROUTE) : null }>
                                         User panel
                                         <FaUserAlt />
                                     </NavDropdown.Item>
                                     <NavDropdown.Item
                                         className={'d-flex align-items-center justify-content-between'}
-                                        onClick={() => history.push(CART_ROUTE)}>
+                                        onClick={ isRealPage ? () => history.push(CART_ROUTE) : null }>
                                         Cart
                                         <FaShoppingCart />
                                     </NavDropdown.Item>
@@ -57,7 +70,7 @@ const NavBar = observer(( {props} ) => {
                     </div>
                     :
                     <Nav className="ms-auto" style={{color: "white"}}>
-                        <Button variant={"outline-light"} className="ms-2" onClick={() => history.push(LOGIN_ROUTE)}>Authorization</Button>
+                        <Button variant={"outline-light"} className="ms-2" onClick={ isRealPage ? () => history.push(LOGIN_ROUTE) : null }>Authorization</Button>
                     </Nav>
                 }
             </Container>

@@ -9,32 +9,14 @@ import NavBar from "../components/NavBars/NavBar";
 import Auth_block from "../components/page_blocks/Auth_block";
 import Registration_block from "../components/page_blocks/Registration_block";
 
-const Registration = observer(() => {
-
-    const {user} = useContext(Context)
-    const location = useLocation();
-    const history = useHistory();
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-
-    const click = async () => {
-        try {
-            let data;
-            data = await registration(email, password);
-            user.setUser(data)
-            user.setIsAuth(true)
-            history.push(SHOP_ROUTE)
-        } catch (e) {
-            alert(e.response.data.message)
-        }
-    }
+const Registration = () => {
 
     return (
         <>
             <NavBar />
-            <Registration_block emailState={ {email, setEmail} } passwordState={ {password, setPassword} } registerFunction={click} />
+            <Registration_block />
         </>
     );
-});
+};
 
 export default Registration;
