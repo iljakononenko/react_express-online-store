@@ -3,16 +3,19 @@ module.exports = function (req, res, next) {
         next()
     }
 
-    console.log("req hostname:")
-    console.log(req.hostname)
-    console.log("req origin:")
-    console.log(req.get('origin'))
+    let host = req.get('origin');
+    // host = "http://prod.prodsell.pl"
+    const regex = /:\/\/(\w+)\.prodsell\.pl/g;
+    const found = regex.exec(host);
 
-    const host = req.headers.host;
+    if (found != null && found[1] != null) {
+        console.log('Subdomain request')
+        console.log(found[1])
+        req.systemSource = found[1];
+    } else {
+        console.log('Main request')
+        console.log(host)
+    }
 
-    console.log("middleware host:")
-    console.log(host)
-
-    req.systemSource = host;
     next()
 }
