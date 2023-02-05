@@ -1,4 +1,4 @@
-import {$authHost, $host} from "./index";
+import {$adminHost, $authHost, $host} from "./index";
 import jwt_decode from "jwt-decode";
 
 export const registration = async (email, password) => {
@@ -11,6 +11,27 @@ export const login = async (email, password) => {
     const {data} = await $host.post('api/user/login', {email, password})
     localStorage.setItem('token', data.token)
     return jwt_decode(data.token);
+}
+
+export const loginAdmin = async (email, password) => {
+    const {data} = await $host.post('api/user/login', {email, password})
+    let data_decoded = jwt_decode(data.token);
+    console.log(data_decoded.role === "ADMIN")
+    if (data_decoded.role === "ADMIN") {
+        localStorage.setItem('admin_token', data.token)
+        return data_decoded
+    }
+    return null;
+}
+
+export const checkAdmin = async () => {
+    const {data} = await $adminHost.get('api/user/auth')
+    let data_decoded = jwt_decode(data.token);
+    if (data_decoded.role === "ADMIN") {
+        localStorage.setItem('admin_token', data.token)
+        return data_decoded
+    }
+    return null;
 }
 
 export const check = async () => {

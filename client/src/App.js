@@ -4,14 +4,14 @@ import AppRouter from "./components/AppRouter";
 import NavBar from "./components/NavBars/NavBar";
 import {observer} from "mobx-react-lite";
 import {Context} from "./index";
-import {check} from "./http/userApi";
+import {check, checkAdmin} from "./http/userApi";
 import {Spinner} from "react-bootstrap";
 import "./App.css";
 import {fetchBrands, fetchItems, fetchTypes} from "./http/itemApi";
 
 const App = observer(() => {
 
-    const {item, user} = useContext(Context)
+    const {item, user, admin} = useContext(Context)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -31,8 +31,17 @@ const App = observer(() => {
     }, [item.page, item.selectedType, item.selectedBrand])
 
     useEffect(() => {
+        checkAdmin().then(data => {
+            if (data != null) {
+                admin.setAdmin(data)
+                admin.setIsAuth(true)
+            }
+        }).finally(() => setLoading(false))
+    },[])
+
+    useEffect(() => {
         check().then(data => {
-            user.setUser(true)
+            user.setUser(data)
             user.setIsAuth(true)
         }).finally(() => setLoading(false))
     },[])

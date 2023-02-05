@@ -5,7 +5,8 @@ const User = sequelize.define('user', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     email: {type: DataTypes.STRING, unique: true},
     password: {type: DataTypes.STRING},
-    role: {type: DataTypes.STRING, defaultValue: "USER"}
+    role: {type: DataTypes.STRING, defaultValue: "USER"},
+    subdomain: {type: DataTypes.STRING},
 })
 
 // 1 - billing address
@@ -25,12 +26,12 @@ const UserData = sequelize.define('user_data', {
 })
 
 const Cart = sequelize.define('cart', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true}
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
 
 const CartItem = sequelize.define('cart_item', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    quantity: {type: DataTypes.INTEGER}
+    quantity: {type: DataTypes.INTEGER},
 })
 
 const ShopItem = sequelize.define('shop_item', {
@@ -39,16 +40,19 @@ const ShopItem = sequelize.define('shop_item', {
     price: {type: DataTypes.INTEGER, allowNull: false},
     rating: {type: DataTypes.INTEGER, defaultValue: 0},
     img: {type: DataTypes.STRING, allowNull: false},
+    subdomain: {type: DataTypes.STRING},
 })
 
 const Type = sequelize.define('type', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false}
+    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    subdomain: {type: DataTypes.STRING},
 })
 
 const Brand = sequelize.define('brand', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false}
+    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    subdomain: {type: DataTypes.STRING},
 })
 
 const Rating = sequelize.define('rating', {
@@ -59,7 +63,7 @@ const Rating = sequelize.define('rating', {
 const ItemInfo = sequelize.define('item_info', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     title: {type: DataTypes.STRING, allowNull: false},
-    description: {type: DataTypes.STRING, allowNull: false}
+    description: {type: DataTypes.STRING, allowNull: false},
 })
 
 const TypeBrand = sequelize.define('type_brand', {
@@ -71,6 +75,7 @@ const ServiceWebSites = sequelize.define('service_web_sites', {
     system_id: {type: DataTypes.INTEGER},
     pages: {type: DataTypes.TEXT},
     name: {type: DataTypes.STRING},
+    subdomain: {type: DataTypes.STRING},
     layout_type_id: {type: DataTypes.INTEGER}
 })
 
@@ -95,7 +100,8 @@ const Order = sequelize.define('order', {
     deliveryCity: {type: DataTypes.STRING},
     deliveryPostal: {type: DataTypes.STRING},
 
-    status: {type: DataTypes.INTEGER, defaultValue: 1}
+    status: {type: DataTypes.INTEGER, defaultValue: 1},
+    subdomain: {type: DataTypes.STRING},
 })
 
 const OrderProduct = sequelize.define('order_product', {

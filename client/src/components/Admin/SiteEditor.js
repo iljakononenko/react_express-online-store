@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import "../editor.css"
-import {getBasicBlock} from "../utils/components_map";
+import "../../editor.css"
+import {getBasicBlock} from "../../utils/components_map";
 import {FaAngleLeft, FaPlus, FaRegTrashAlt} from 'react-icons/fa';
-import NavBar_adminEditor from "./NavBars/NavBar_adminEditor";
-import {createSite, editSite, fetchOneSite} from "../http/adminApi";
+import NavBar_adminEditor from "../NavBars/NavBar_adminEditor";
+import {createSite, editSite, fetchOneSite} from "../../http/adminApi";
 import {AiOutlinePlus} from "react-icons/ai";
 import {useParams} from "react-router-dom";
-import {shop_starting_elements} from "../utils/starting_elements";
-import AddBlock from "./modals/AddBlock";
+import {shop_starting_elements} from "../../utils/starting_elements";
+import AddBlock from "../modals/AddBlock";
 const uuid = require('uuid')
 
 const SiteEditor = () => {

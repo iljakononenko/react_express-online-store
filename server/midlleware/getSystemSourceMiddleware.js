@@ -4,7 +4,7 @@ module.exports = function (req, res, next) {
     }
 
     let host = req.get('origin');
-    // host = "http://prod.prodsell.pl"
+    // host = "http://test.prodsell.pl"
     const regex = /:\/\/(\w+)\.prodsell\.pl/g;
     const found = regex.exec(host);
 

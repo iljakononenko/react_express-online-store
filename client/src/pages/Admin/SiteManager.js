@@ -1,18 +1,22 @@
-import React, {useEffect, useState} from 'react';
-import NavBar_admin from "../components/NavBars/NavBar_admin";
-import Sidebar_admin from "../components/Sidebar_admin";
+import React, {useContext, useEffect, useState} from 'react';
+import NavBar_admin from "../../components/NavBars/NavBar_admin";
+import Sidebar_admin from "../../components/Admin/Sidebar_admin";
 import {Button, Container} from "react-bootstrap";
 import {FaPlus} from "react-icons/fa";
-import CreateSite from "../components/modals/CreateSite";
+import CreateSite from "../../components/modals/CreateSite";
 import "./editor.css"
-import {NavLink} from "react-router-dom";
-import {ADMIN_ROUTE, EDITOR_ROUTE} from "../utils/consts";
-import {fetchOneSite, fetchWebSites} from "../http/adminApi";
+import {NavLink, useHistory, useLocation} from "react-router-dom";
+import {ADMIN_ROUTE, EDITOR_ROUTE} from "../../utils/consts";
+import {fetchOneSite, fetchWebSites} from "../../http/adminApi";
+import {observer} from "mobx-react-lite";
+import {Context} from "../../index";
 
-const SiteManager = () => {
+const SiteManager = observer(() => {
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
+    const {admin} = useContext(Context)
+    const history = useHistory()
 
     const openModal = () => {
         setIsModalOpen(true)
@@ -20,6 +24,14 @@ const SiteManager = () => {
 
     const closeModal = () => {
         setIsModalOpen(false)
+    }
+
+    const selectWebSite = (id, name) => {
+        admin.setCurrentSiteId(id)
+        admin.setCurrentSiteName(name)
+        localStorage.setItem("current_website_id", id)
+        localStorage.setItem("current_website_name", name)
+        history.push(ADMIN_ROUTE)
     }
 
     const [websites, setWebsites] = useState([])
@@ -74,7 +86,7 @@ const SiteManager = () => {
                             {
                                 !isLoading && websites.map(website =>
                                     <div key={website.id} className="col-4 p-2">
-                                        <NavLink className="card shadow-sm text-decoration-none" to={ADMIN_ROUTE}>
+                                        <div className="card shadow-sm text-decoration-none cursor-pointer" onClick={() => selectWebSite(website.id, website.name)}>
 
                                             <svg className="bd-placeholder-img card-img-top" width="100%" height="180"
                                                  xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail"
@@ -83,12 +95,12 @@ const SiteManager = () => {
                                             </svg>
 
                                             <div className="card-body">
-                                                <p className="card-text mb-0">{website.name}</p>
+                                                <p className="card-text mb-0 text-primary">{website.name}</p>
                                                 <div className="d-flex justify-content-end align-items-center">
                                                     <small className="text-muted">{website.lastUpdate === 0 ? "just now" : website.lastUpdate + " minutes ago"} </small>
                                                 </div>
                                             </div>
-                                        </NavLink>
+                                        </div>
                                     </div>
                                 )
                             }
@@ -100,6 +112,6 @@ const SiteManager = () => {
 
         </>
     );
-};
+});
 
 export default SiteManager;

@@ -11,6 +11,7 @@ class AdminController {
         const new_site = await ServiceWebSites.create(
             {
                 name: siteName,
+                subdomain: siteName.toLowerCase(),
                 pages: pages,
                 layout_type_id: layout_type_id,
                 system_id: 1
@@ -43,15 +44,21 @@ class AdminController {
         return res.send({status: 200, websites: websites});
     }
 
-    async get(req, res) {
-        const {id} = req.params
+    async get(req, res, next) {
+        try {
+            const {id} = req.params
 
-        const pages = await ServiceWebSites.findOne(
-            {
-                where: {id}
-            }
-        )
-        return res.send(pages);
+            const website = await ServiceWebSites.findOne(
+                {
+                    where: {id}
+                }
+            )
+
+            return res.send(website);
+        } catch (err) {
+            console.log(err)
+            return next(ApiError.badRequest('Error'))
+        }
     }
 
 }
