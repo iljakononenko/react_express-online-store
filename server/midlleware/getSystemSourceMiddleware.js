@@ -1,3 +1,4 @@
+const ApiError = require("../error/ApiError");
 module.exports = function (req, res, next) {
     if (req.method === "OPTIONS") {
         next()
@@ -9,13 +10,15 @@ module.exports = function (req, res, next) {
     const found = regex.exec(host);
 
     if (found != null && found[1] != null) {
-        console.log('Subdomain request')
+        console.log('Subdomain request 1')
         console.log(found[1])
         req.systemSource = found[1];
+        next()
     } else {
         console.log('Main request')
         console.log(host)
+        return next(ApiError.notFound("Subdomain not found"))
     }
 
-    next()
+
 }

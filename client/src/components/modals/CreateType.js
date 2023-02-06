@@ -1,15 +1,41 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Button, Form, Modal} from "react-bootstrap";
-import {createType} from "../../http/itemApi";
+import {createType, editType, fetchTypes} from "../../http/itemApi";
+import {observer} from "mobx-react-lite";
+import {Context} from "../../index";
 
-const CreateType = ({show, onHide}) => {
+const CreateType = observer(({show, onHide, currentType = {}}) => {
 
-    const [value, setValue] = useState('');
-    const addType = () => {
-        createType( {name: value}).then(data => {
-            setValue('')
-            onHide()
-        })
+    const {item} = useContext(Context)
+
+    const [value, setValue] = useState(Object.keys(currentType).length === 0  ? '' : currentType.name);
+    const submitType = () => {
+        console.log(currentType)
+
+        if (Object.keys(currentType).length === 0) {
+            createType( {name: value}).then(data => {
+                setValue('')
+                fetchTypes().then(data => {
+                    data.sort(function(a, b) {
+                        return a.id - b.id;
+                    })
+                    item.setTypes(data)
+                })
+                onHide()
+            })
+        } else {
+            editType( currentType.id, value).then(data => {
+                setValue('')
+                fetchTypes().then(data => {
+                    data.sort(function(a, b) {
+                        return a.id - b.id;
+                    })
+                    item.setTypes(data)
+                })
+                onHide()
+            })
+        }
+
     }
 
     return (
@@ -21,7 +47,7 @@ const CreateType = ({show, onHide}) => {
         >
             <Modal.Header>
                 <Modal.Title>
-                    Add Type
+                    {Object.keys(currentType).length === 0 ? "Add Type" : "Edit Type"}
                 </Modal.Title>
             </Modal.Header>
 
@@ -33,10 +59,10 @@ const CreateType = ({show, onHide}) => {
 
             <Modal.Footer>
                 <Button variant={"outline-danger"} onClick={onHide}>Cancel</Button>
-                <Button variant={"outline-success"} onClick={addType}>Submit</Button>
+                <Button variant={"outline-success"} onClick={submitType}>Submit</Button>
             </Modal.Footer>
         </Modal>
     );
-};
+});
 
 export default CreateType;

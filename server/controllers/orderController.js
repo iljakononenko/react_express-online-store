@@ -1,30 +1,50 @@
-const {Brand, Order, ShopItem, OrderProduct} = require('../models/models')
+const {Brand, Order, ShopItem, OrderProduct, ItemInfo} = require('../models/models')
 const ApiError = require('../error/ApiError')
 
-class BrandController {
-    async create(req, res) {
-        const {name} = req.body;
-        const brand = await Brand.create({name});
+class OrderController {
 
-        return res.json(brand);
+    async getAll(req, res, next) {
+        try {
+            console.log(req.systemSource)
+            const orders = await Order.findAll({
+                where: {subdomain: req.systemSource},
+                include: [
+                    {
+                        model: OrderProduct, as: "order_products", include: [
+                            {model: ShopItem, as: "shop_item"}
+                        ] },
+                ]
+            })
+
+            console.log(orders)
+
+            return res.json(orders);
+        } catch (err) {
+            console.log(err)
+            return next(new ApiError.notFound('orders for current system not found'))
+        }
     }
 
-    async getAll(req, res) {
-        const userId = req.user.id;
-
-        const orders = await Order.findAll({
-            where: {userId},
-            include: [
+    async getOne(req, res) {
+        try {
+            const {id} = req.params
+            const order = await ShopItem.findOne(
                 {
-                    model: OrderProduct, as: "order_products", include: [
-                        {model: ShopItem, as: "shop_item"}
-                    ] },
-            ]
-        })
-
-        return res.json(orders);
+                    where: {id},
+                    include: [
+                        {
+                            model: OrderProduct, as: "order_products", include: [
+                                {model: ShopItem, as: "shop_item"}
+                            ] },
+                    ]
+                },
+            )
+            return res.json(order)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
 }
 
-module.exports = new BrandController();
+module.exports = new OrderController();

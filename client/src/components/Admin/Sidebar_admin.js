@@ -38,7 +38,9 @@ const SidebarAdmin = observer(() => {
     const logOut = () => {
         admin.setIsAuth(false)
         admin.setAdmin({})
-        localStorage.setItem('admin_token', "")
+        localStorage.removeItem('admin_token')
+        localStorage.removeItem('current_website_name')
+        localStorage.removeItem('current_website_id')
         history.push(ADMIN_ROUTE)
     }
 

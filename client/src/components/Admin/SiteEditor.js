@@ -54,7 +54,7 @@ const SiteEditor = () => {
             if ( data != null && data.pages != null ) {
                 let obtained_pages = JSON.parse(data.pages)
                 setPages(obtained_pages);
-                console.log(obtained_pages)
+                console.log(obtained_pages);
             } else {
                 setPages(test);
                 setIsNewSite(true);

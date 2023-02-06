@@ -3,7 +3,7 @@ const {DataTypes} = require('sequelize')
 
 const User = sequelize.define('user', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    email: {type: DataTypes.STRING, unique: true},
+    email: {type: DataTypes.STRING},
     password: {type: DataTypes.STRING},
     role: {type: DataTypes.STRING, defaultValue: "USER"},
     subdomain: {type: DataTypes.STRING},
@@ -36,7 +36,7 @@ const CartItem = sequelize.define('cart_item', {
 
 const ShopItem = sequelize.define('shop_item', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true},
+    name: {type: DataTypes.STRING},
     price: {type: DataTypes.INTEGER, allowNull: false},
     rating: {type: DataTypes.INTEGER, defaultValue: 0},
     img: {type: DataTypes.STRING, allowNull: false},
@@ -45,13 +45,13 @@ const ShopItem = sequelize.define('shop_item', {
 
 const Type = sequelize.define('type', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    name: {type: DataTypes.STRING, allowNull: false},
     subdomain: {type: DataTypes.STRING},
 })
 
 const Brand = sequelize.define('brand', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    name: {type: DataTypes.STRING, allowNull: false},
     subdomain: {type: DataTypes.STRING},
 })
 
@@ -69,6 +69,9 @@ const ItemInfo = sequelize.define('item_info', {
 const TypeBrand = sequelize.define('type_brand', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
 })
+
+// 1 - simple website (single page)
+// 2 - online shop
 
 const ServiceWebSites = sequelize.define('service_web_sites', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},

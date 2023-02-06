@@ -26,14 +26,19 @@ const NavBarAdmin = observer(() => {
                     ""
                 }
 
-                    <Nav className="ms-auto" style={{color: "white"}}>
-                        <Button variant={"outline-light"} className="ms-2 d-flex align-items-center"
-                                onClick={() => {history.push("/")}}
-                        >
-                            Go to website
-                            <FaCaretRight style={{ marginLeft: "6px", marginTop: "2px" }} />
-                        </Button>
-                    </Nav>
+                {
+                    location.pathname !== "/manager" ?
+                        <Nav className="ms-auto" style={{color: "white"}}>
+                            <Button variant={"outline-light"} className="ms-2 d-flex align-items-center"
+                                    onClick={() => {history.push("/")}}
+                            >
+                                Go to website
+                                <FaCaretRight style={{ marginLeft: "6px", marginTop: "2px" }} />
+                            </Button>
+                        </Nav>
+                        :
+                        null
+                }
             </Container>
         </Navbar>
     );

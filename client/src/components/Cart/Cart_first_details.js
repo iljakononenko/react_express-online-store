@@ -9,6 +9,11 @@ const CartFirstDetails = () => {
     }
 
     return (
+        <>
+        </>
+    )
+
+    return (
         <div>
             <h3 style={{ margin: "24px 0" }}>1. Delivery</h3>
 

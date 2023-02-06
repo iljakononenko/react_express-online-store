@@ -103,6 +103,8 @@ class CartController {
                 deliveryCountry: deliveryAddressData.country,
                 deliveryCity: deliveryAddressData.city,
                 deliveryPostal: deliveryAddressData.postal,
+
+                subdomain: req.systemSource
             })
 
             for (let item of items) {

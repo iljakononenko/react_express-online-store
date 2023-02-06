@@ -17,7 +17,7 @@ const App = observer(() => {
     useEffect(() => {
         fetchTypes().then(data => item.setTypes(data))
         fetchBrands().then(data => item.setBrands(data))
-        fetchItems(null, null, 1, 3).then(data => {
+        fetchItems(null, null, 1, 5).then(data => {
             item.setItems(data.rows)
             item.setTotalCount(data.count)
         })
@@ -31,19 +31,29 @@ const App = observer(() => {
     }, [item.page, item.selectedType, item.selectedBrand])
 
     useEffect(() => {
-        checkAdmin().then(data => {
-            if (data != null) {
-                admin.setAdmin(data)
-                admin.setIsAuth(true)
-            }
-        }).finally(() => setLoading(false))
+        if (localStorage.getItem('admin_token') != null) {
+            checkAdmin().then(data => {
+                if (data != null) {
+                    admin.setAdmin(data)
+                    admin.setIsAuth(true)
+                }
+            }).finally(() => setLoading(false))
+        } else {
+            setLoading(false)
+        }
     },[])
 
     useEffect(() => {
-        check().then(data => {
-            user.setUser(data)
-            user.setIsAuth(true)
-        }).finally(() => setLoading(false))
+        if (localStorage.getItem('token') != null) {
+            check().then(data => {
+                if (data != null) {
+                    user.setUser(data)
+                    user.setIsAuth(true)
+                }
+            }).finally(() => setLoading(false))
+        } else {
+            setLoading(false)
+        }
     },[])
 
     if (loading) {

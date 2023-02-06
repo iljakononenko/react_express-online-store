@@ -1,7 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Switch, Route, Redirect, useLocation} from 'react-router-dom';
 import {adminRoutes, authRoutes, coreRoutes, publicRoutes} from "../routes";
-import {ADMIN_LOGIN_ROUTE, SHOP_ROUTE} from "../utils/consts";
+import {ADMIN_LOGIN_ROUTE, ADMIN_ROUTE, MANAGER_ROUTE, SHOP_ROUTE} from "../utils/consts";
 import {Context} from "../index";
 import NavBar from "./NavBars/NavBar";
 import {check} from "../http/userApi";
@@ -14,15 +14,18 @@ const AppRouter = () => {
     const {user} = useContext(Context);
     const {admin} = useContext(Context);
     const location = useLocation();
-    const [pages, setPages] = useState([]);
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         fetchPages().then(data => {
-            console.log(data)
-            let obtained_pages = JSON.parse(data.pages)
-            console.log(obtained_pages)
-            setPages(obtained_pages)
+            if (data !== "" && data.pages !== null) {
+                console.log('setting current pages')
+                let obtained_pages = JSON.parse(data.pages)
+                console.log(obtained_pages)
+                admin.setCurrentPages(obtained_pages)
+            } else {
+                console.log('empty')
+            }
         }).finally(() => setLoading(false))
     },[])
 
@@ -49,38 +52,44 @@ const AppRouter = () => {
             )}
 
             {
-                pages.length === 1 ?
-                    <Route key={pages[0].pageName} path={"/"} exact >
+                admin.currentPages.length !== 0 ?
 
-                        {
-                            pages[0].components.map( ( { component_id, key } ) =>
-                                getBlock(component_id, key)
-                            )
-                        }
+                    admin.currentPages.length === 1 ?
+                        <Route key={admin.currentPages[0].pageId} path={"/"} exact >
 
-                    </Route>
+                            {
+                                admin.currentPages[0].components.map( ( { component_id, key } ) =>
+                                    getBlock(component_id, key)
+                                )
+                            }
+
+                        </Route>
+                        :
+                        admin.currentPages.map( page =>
+
+                            <Route key={page.pageId} path={page.pageUrl} exact >
+
+                                {
+                                    page.components.map( ( { component_id, key } ) =>
+                                        getBlock(component_id, key)
+                                    )
+                                }
+
+                            </Route>
+                        )
                     :
-                pages.map( page =>
-
-                    <Route key={page.pageName} path={"/" + page.pageName.toLowerCase() } exact >
-
-                        {
-                            page.components.map( ( { component_id, key } ) =>
-                                getBlock(component_id, key)
-                            )
-                        }
-
-                    </Route>
-                )
+                    null
             }
 
-            {/*{publicRoutes.map(({path, Component}) =>*/}
-            {/*    <Route key={path} path={path} component={Component} exact />*/}
-            {/*)}*/}
-
             {
-                location.pathname === "/admin" ?
-                <Redirect to={ADMIN_LOGIN_ROUTE}/>
+                location.pathname.includes("/admin") ?
+                    admin.isAuth ?
+                        localStorage.getItem('current_website_id') == null ?
+                            <Redirect to={MANAGER_ROUTE}/>
+                            :
+                            <Redirect to={ADMIN_ROUTE}/>
+                        :
+                        <Redirect to={ADMIN_LOGIN_ROUTE}/>
                     :
                 <>
                     <div className="d-flex align-items-center justify-content-center vh-100">

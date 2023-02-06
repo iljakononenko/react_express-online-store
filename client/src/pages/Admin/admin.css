@@ -13,3 +13,7 @@
 .sidebar .nav-link.active {
     color: #2470dc;
 }
+
+td {
+    vertical-align: middle;
+}

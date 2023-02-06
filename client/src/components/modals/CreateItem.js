@@ -1,21 +1,29 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Button, Dropdown, Form, Modal} from "react-bootstrap";
 import {Context} from "../../index";
-import {createItem, fetchBrands, fetchItems, fetchTypes} from "../../http/itemApi";
+import {createItem, editItem, fetchBrands, fetchItems, fetchTypes} from "../../http/itemApi";
+import {observer} from "mobx-react-lite";
 
-const CreateItem = ({show, onHide}) => {
+const CreateItem = observer(({show, onHide, currentItem = {}, setReload}) => {
 
-    const [name, setName] = useState('')
-    const [price, setPrice] = useState(0)
+    const [name, setName] = useState(Object.keys(currentItem).length === 0 ? '' : currentItem.name)
+    const [price, setPrice] = useState(Object.keys(currentItem).length === 0 ? 0 : currentItem.price)
     const [typeSelected, setSelectedType] = useState(null)
     const [brandSelected, setSelectedBrand] = useState(null)
     const [file, setFile] = useState(null)
     const {item} = useContext(Context)
 
     useEffect(() => {
-        fetchTypes().then(data => item.setTypes(data))
-        fetchBrands().then(data => item.setBrands(data))
+        if (Object.keys(currentItem).length !== 0) {
+            let type = item.types.find(type => {return type.id === currentItem.typeId})
+            let brand = item.brands.find(brand => {return brand.id === currentItem.brandId})
+
+            setSelectedType(type)
+            setSelectedBrand(brand)
+        }
     }, [])
+
+
 
     const selectFile = e => {
         setFile(e.target.files[0])
@@ -29,7 +37,19 @@ const CreateItem = ({show, onHide}) => {
         formData.append('brandId', brandSelected.id)
         formData.append('typeId', typeSelected.id)
         formData.append('info', "info")
-        createItem(formData).then(data => onHide());
+
+        if (Object.keys(currentItem).length !== 0) {
+            formData.append('id', currentItem.id)
+            editItem(formData).then(data => {
+                setReload(prevState => ++prevState)
+                onHide()
+            });
+        } else {
+            createItem(formData).then(data => {
+                setReload(prevState => ++prevState)
+                onHide()
+            });
+        }
     }
 
     return (
@@ -41,7 +61,7 @@ const CreateItem = ({show, onHide}) => {
         >
             <Modal.Header>
                 <Modal.Title>
-                    Add Item
+                    {Object.keys(currentItem).length !== 0 ? "Edit item" : "Add Item"}
                 </Modal.Title>
             </Modal.Header>
 
@@ -76,6 +96,6 @@ const CreateItem = ({show, onHide}) => {
             </Modal.Footer>
         </Modal>
     );
-};
+});
 
 export default CreateItem;

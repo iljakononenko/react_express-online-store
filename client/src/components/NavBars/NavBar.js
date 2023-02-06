@@ -27,6 +27,7 @@ const NavBar = observer(( {props} ) => {
         if (isRealPage) {
             user.setIsAuth(false)
             user.setUser({})
+            history.push("/")
         }
     }
 
@@ -36,7 +37,7 @@ const NavBar = observer(( {props} ) => {
                 <NavLink style={{color: "white", textDecoration: "none"}} to={ isRealPage ? SHOP_ROUTE : "#"}>ProdSell</NavLink>
                 {user.isAuth ?
                     <div className={'d-flex align-items-center'}>
-                        <p className={'mb-0 text-white me-2'}>Hello, Illia Kononenko!</p>
+                        <p className={'mb-0 text-white me-2'}>Hello!</p>
                         <Navbar.Toggle className={"ms-auto"} style={{color: "white"}} aria-controls="navbar-dark-example"/>
                         <Navbar.Collapse id="navbar-dark-example">
                             <Nav>

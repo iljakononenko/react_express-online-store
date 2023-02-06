@@ -6,6 +6,7 @@ export default class AdminStore {
         this._admin = {};
         this._currentSiteId = 0;
         this._currentSiteName = "";
+        this._currentPages = [];
         makeAutoObservable(this);
     }
 
@@ -25,6 +26,10 @@ export default class AdminStore {
         this._currentSiteName = name;
     }
 
+    setCurrentPages(pages) {
+        this._currentPages = pages;
+    }
+
     get isAuth() {
         return this._isAuth;
     }
@@ -39,5 +44,9 @@ export default class AdminStore {
 
     get currentSiteName() {
         return this._currentSiteName;
+    }
+
+    get currentPages() {
+        return this._currentPages;
     }
 }

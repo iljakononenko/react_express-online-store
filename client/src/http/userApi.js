@@ -14,7 +14,7 @@ export const login = async (email, password) => {
 }
 
 export const loginAdmin = async (email, password) => {
-    const {data} = await $host.post('api/user/login', {email, password})
+    const {data} = await $host.post('api/admin/login', {email, password})
     let data_decoded = jwt_decode(data.token);
     console.log(data_decoded.role === "ADMIN")
     if (data_decoded.role === "ADMIN") {
@@ -41,7 +41,7 @@ export const check = async () => {
 }
 
 export const getAllOrders = async () => {
-    const {data} = await $authHost.get('api/order/')
+    const {data} = await $authHost.get('api/user/orders')
     return data;
 }
 

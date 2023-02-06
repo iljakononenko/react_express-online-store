@@ -46,22 +46,24 @@ const Cart = observer(() => {
 
     useEffect(() => {
         getUserdata().then(result => {
-            cart.setBillingAddressData(result.find(userDataInstance => { return userDataInstance.typeId === 1 } ) )
-            cart.setDeliveryAddressData(result.find(userDataInstance => { return userDataInstance.typeId === 2 } ) )
+            if (result.length != null) {
+                cart.setBillingAddressData(result.find(userDataInstance => { return userDataInstance.typeId === 1 } ) )
+                cart.setDeliveryAddressData(result.find(userDataInstance => { return userDataInstance.typeId === 2 } ) )
 
-            let data_1_values = Object.entries(result[0]);
-            let data_2_values = result[1];
-            let are_same_flag = true;
+                let data_1_values = Object.entries(result[0]);
+                let data_2_values = result[1];
+                let are_same_flag = true;
 
-            for (let [key, value] of data_1_values) {
-                if (key !== "id" && key != "typeId" && key !== "updatedAt" && key !== "createdAt" && value !== data_2_values[key]) {
-                    are_same_flag = false;
-                    break;
+                for (let [key, value] of data_1_values) {
+                    if (key !== "id" && key != "typeId" && key !== "updatedAt" && key !== "createdAt" && value !== data_2_values[key]) {
+                        are_same_flag = false;
+                        break;
+                    }
                 }
-            }
 
-            if (!are_same_flag) {
-                cart.switchIsDeliverySameAsBillingAddress();
+                if (!are_same_flag) {
+                    cart.switchIsDeliverySameAsBillingAddress();
+                }
             }
         })
     }, [])

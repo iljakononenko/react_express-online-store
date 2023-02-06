@@ -10,12 +10,13 @@ import {ADMIN_ROUTE, EDITOR_ROUTE} from "../../utils/consts";
 import {fetchOneSite, fetchWebSites} from "../../http/adminApi";
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
+import {fetchBrands, fetchItems, fetchTypes} from "../../http/itemApi";
 
 const SiteManager = observer(() => {
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
-    const {admin} = useContext(Context)
+    const {item, admin} = useContext(Context)
     const history = useHistory()
 
     const openModal = () => {
@@ -32,6 +33,13 @@ const SiteManager = observer(() => {
         localStorage.setItem("current_website_id", id)
         localStorage.setItem("current_website_name", name)
         history.push(ADMIN_ROUTE)
+
+        fetchTypes().then(data => item.setTypes(data))
+        fetchBrands().then(data => item.setBrands(data))
+        fetchItems(null, null, 1, 5).then(data => {
+            item.setItems(data.rows)
+            item.setTotalCount(data.count)
+        })
     }
 
     const [websites, setWebsites] = useState([])

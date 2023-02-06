@@ -7,7 +7,7 @@ class managerController {
         try {
             const systemSource = req.systemSource;
 
-            console.log(systemSource)
+            // console.log(systemSource)
 
             if (systemSource == null) {
                 return next(ApiError.notFound('Not found'))
@@ -19,11 +19,11 @@ class managerController {
                 }
             )
 
-            console.log(website)
+            // console.log(website)
 
             return res.send(website)
         } catch (err) {
-            // console.log(err)
+            console.log(err)
             return next(ApiError.badRequest("Error"))
         }
     }
