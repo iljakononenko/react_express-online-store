@@ -1,4 +1,4 @@
-const {ServiceWebSites, Brand, Type, ShopItem, Order, OrderProduct, User, UserData} = require('../models/models')
+const {ServiceWebSites, Brand, Type, ShopItem, Order, OrderProduct, User, UserData, WebPage} = require('../models/models')
 const ApiError = require('../error/ApiError')
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -46,11 +46,14 @@ class AdminController {
             {
                 name: siteName,
                 subdomain: subdomain,
-                pages: pages,
                 layout_type_id: layout_type_id,
                 system_id: 1
             }
         );
+
+        for (let page of pages) {
+            await WebPage.create({id: page.id ,name: page.name, url: page.url, components: JSON.stringify(page.components), serviceWebSiteId: new_site.id})
+        }
 
         if (Number(layout_type_id) === 2) {
             let lenovo_brand = await Brand.create({name: "Lenovo", subdomain: subdomain});
@@ -67,16 +70,31 @@ class AdminController {
             await ShopItem.create({name: "Apple MacBook Pro", price: 12889,brandId: apple_brand.id, typeId: laptop_type.id, img: macbook_img, subdomain: subdomain})
         }
 
-        return res.send({status: 200, message: "success", editor_id: new_site.id, website: new_site});
+        let new_site_with_pages = await ServiceWebSites.findOne({where: {id: new_site.id}, include: [{model: WebPage, as: "webpages" }]})
+
+        return res.send({status: 200, message: "success", editor_id: new_site.id, website: new_site_with_pages});
     }
 
     async updateSite(req, res, next) {
         try {
-            const {id, pages} = req.body;
-            // console.log(req.body);
-            const updated_site = await ServiceWebSites.update({ pages: pages }, {
-                where: {id},
-            });
+            const {pages} = req.body;
+            console.log(req.body);
+            for (let page of pages) {
+                page.components = JSON.stringify(page.components)
+
+                if (page.tag != null && page.tag == "new") {
+                    await WebPage.create({id: page.id ,name: page.name, url: page.url, components: page.components, serviceWebSiteId: page.serviceWebSiteId})
+                } else {
+                    let page_before = WebPage.findOne({where: {id: page.id}})
+
+                    if (!page_before) {
+                        await WebPage.destroy({where: {id: page.id}})
+                    } else {
+                        await WebPage.update({ name: page.name, url: page.url, components: page.components }, {where: {id: page.id}})
+                    }
+                }
+
+            }
 
             return res.send({status: 200, message: "success"});
         } catch (err) {
@@ -87,8 +105,7 @@ class AdminController {
     }
 
     async getAllWebsites(req, res) {
-
-        const websites = await ServiceWebSites.findAll()
+        const websites = await ServiceWebSites.findAll({include: [{model: WebPage, as: "webpages" }]})
 
         return res.send({status: 200, websites: websites});
     }
@@ -98,9 +115,7 @@ class AdminController {
             const {id} = req.params
 
             const website = await ServiceWebSites.findOne(
-                {
-                    where: {id}
-                }
+                {where: {id}, include: [{model: WebPage, as: "webpages" }]}
             )
 
             return res.send(website);

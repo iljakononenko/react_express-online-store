@@ -3,7 +3,7 @@ import React from 'react';
 const Pricing = () => {
     return (
         <>
-            <div className="row row-cols-1 row-cols-md-3 mb-3 text-center">
+            <div className="row row-cols-1 row-cols-md-3 my-3 text-center">
                 <div className="col">
                     <div className="card mb-4 rounded-3 shadow-sm">
                         <div className="card-header py-3">
@@ -67,10 +67,10 @@ const Pricing = () => {
                 <table className="table text-center">
                     <thead>
                     <tr>
-                        <th style="width: 34%;"></th>
-                        <th style="width: 22%;">Free</th>
-                        <th style="width: 22%;">Pro</th>
-                        <th style="width: 22%;">Enterprise</th>
+                        <th style={{width: "34%"}}></th>
+                        <th style={{width: "22%"}}>Free</th>
+                        <th style={{width: "22%"}}>Pro</th>
+                        <th style={{width: "22%"}}>Enterprise</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -78,17 +78,17 @@ const Pricing = () => {
                         <th scope="row" className="text-start">Public</th>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                     </tr>
@@ -97,12 +97,12 @@ const Pricing = () => {
                         <td></td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                     </tr>
@@ -113,17 +113,17 @@ const Pricing = () => {
                         <th scope="row" className="text-start">Permissions</th>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                     </tr>
@@ -132,12 +132,12 @@ const Pricing = () => {
                         <td></td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                     </tr>
@@ -146,12 +146,12 @@ const Pricing = () => {
                         <td></td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                     </tr>
@@ -161,7 +161,7 @@ const Pricing = () => {
                         <td></td>
                         <td>
                             <svg className="bi" width="24" height="24">
-                                <use xlink:href="#check"/>
+
                             </svg>
                         </td>
                     </tr>

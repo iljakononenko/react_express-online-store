@@ -33,28 +33,28 @@ const CreateSite = observer(({show, onHide}) => {
             alert("Site name should consist only of numbers and letters!")
         }
         if (flag) {
-            createSite( siteName, JSON.stringify(siteVariant.pages), siteVariant.id).then( async data => {
+            createSite( siteName, siteVariant.pages, siteVariant.id).then( async data => {
                 setSiteName('')
                 onHide()
 
                 console.log(data)
 
-                admin.setCurrentPages(JSON.parse(data.website.pages))
-
-                admin.setCurrentSiteId(data.website.id)
-                admin.setCurrentSiteName(data.website.name)
-
-                localStorage.setItem("current_website_id", data.website.id)
-                localStorage.setItem("current_website_name", data.website.name)
-
-                fetchTypes().then(data => item.setTypes(data))
-                fetchBrands().then(data => item.setBrands(data))
-                fetchItems(null, null, 1, 5).then(data => {
-                    item.setItems(data.rows)
-                    item.setTotalCount(data.count)
-                })
-
-                history.push(ADMIN_ROUTE)
+                // admin.setCurrentPages(JSON.parse(data.website.pages))
+                //
+                // admin.setCurrentSiteId(data.website.id)
+                // admin.setCurrentSiteName(data.website.name)
+                //
+                // localStorage.setItem("current_website_id", data.website.id)
+                // localStorage.setItem("current_website_name", data.website.name)
+                //
+                // fetchTypes().then(data => item.setTypes(data))
+                // fetchBrands().then(data => item.setBrands(data))
+                // fetchItems(null, null, 1, 5).then(data => {
+                //     item.setItems(data.rows)
+                //     item.setTotalCount(data.count)
+                // })
+                //
+                // history.push(ADMIN_ROUTE)
             })
         }
     }

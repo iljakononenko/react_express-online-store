@@ -2,9 +2,9 @@ const uuid = require('uuid')
 
 export const shop_starting_elements = [
     {
-        "pageId": uuid.v4(),
-        "pageName": "Shop",
-        "pageUrl": "/",
+        "id": uuid.v4(),
+        "name": "Shop",
+        "url": "/",
         "components": [
             {
                 "key": uuid.v4(),
@@ -24,9 +24,9 @@ export const shop_starting_elements = [
         ]
     },
     {
-        "pageId": uuid.v4(),
-        "pageName": "Item page",
-        "pageUrl": "/item/:id",
+        "id": uuid.v4(),
+        "name": "Item page",
+        "url": "/item/:id",
         "components": [
             {
                 "key": uuid.v4(),
@@ -41,9 +41,9 @@ export const shop_starting_elements = [
         ]
     },
     {
-        "pageId": uuid.v4(),
-        "pageName": "Login",
-        "pageUrl": "/login",
+        "id": uuid.v4(),
+        "name": "Login",
+        "url": "/login",
         "components": [
             {
                 "key": uuid.v4(),
@@ -58,9 +58,9 @@ export const shop_starting_elements = [
         ]
     },
     {
-        "pageId": uuid.v4(),
-        "pageName": "Registration",
-        "pageUrl": "/registration",
+        "id": uuid.v4(),
+        "name": "Registration",
+        "url": "/registration",
         "components": [
             {
                 "key": uuid.v4(),
@@ -74,35 +74,13 @@ export const shop_starting_elements = [
             }
         ]
     },
-    {
-        "pageId": uuid.v4(),
-        "pageName": "Cart",
-        "pageUrl": "/cart",
-        "components": [
-            {
-                "key": uuid.v4(),
-                "component_id": 0,
-                "component_name": "Test 3"
-            },
-            {
-                "key": uuid.v4(),
-                "component_id": 1,
-                "component_name": "Test 3"
-            },
-            {
-                "key": uuid.v4(),
-                "component_id": 2,
-                "component_name": "Test 3"
-            }
-        ]
-    }
 ]
 
 export const single_page_starting_elements = [
     {
-        "pageId": uuid.v4(),
-        "pageName": "Landing",
-        "pageUrl": "/",
+        "id": uuid.v4(),
+        "name": "Landing",
+        "url": "/",
         "components": [
             {
                 "key": uuid.v4(),

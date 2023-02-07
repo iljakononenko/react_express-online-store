@@ -13,7 +13,6 @@ const Features = (props) => {
                             <div
                                 className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#collection"/>
                                 </svg>
                             </div>
                             <h3 className="fs-2">Featured title</h3>
@@ -22,7 +21,6 @@ const Features = (props) => {
                             <a href="#" className="icon-link d-inline-flex align-items-center">
                                 Call to action
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#chevron-right"/>
                                 </svg>
                             </a>
                         </div>
@@ -30,7 +28,6 @@ const Features = (props) => {
                             <div
                                 className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#people-circle"/>
                                 </svg>
                             </div>
                             <h3 className="fs-2">Featured title</h3>
@@ -39,7 +36,6 @@ const Features = (props) => {
                             <a href="#" className="icon-link d-inline-flex align-items-center">
                                 Call to action
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#chevron-right"/>
                                 </svg>
                             </a>
                         </div>
@@ -47,7 +43,7 @@ const Features = (props) => {
                             <div
                                 className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#toggles2"/>
+
                                 </svg>
                             </div>
                             <h3 className="fs-2">Featured title</h3>
@@ -56,7 +52,7 @@ const Features = (props) => {
                             <a href="#" className="icon-link d-inline-flex align-items-center">
                                 Call to action
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#chevron-right"/>
+
                                 </svg>
                             </a>
                         </div>
@@ -73,7 +69,7 @@ const Features = (props) => {
                             <div
                                 className="icon-square text-bg-light d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#toggles2"/>
+
                                 </svg>
                             </div>
                             <div>
@@ -89,7 +85,7 @@ const Features = (props) => {
                             <div
                                 className="icon-square text-bg-light d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#cpu-fill"/>
+
                                 </svg>
                             </div>
                             <div>
@@ -105,7 +101,7 @@ const Features = (props) => {
                             <div
                                 className="icon-square text-bg-light d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#tools"/>
+
                                 </svg>
                             </div>
                             <div>
@@ -139,13 +135,13 @@ const Features = (props) => {
                                         </li>
                                         <li className="d-flex align-items-center me-3">
                                             <svg className="bi me-2" width="1em" height="1em">
-                                                <use xlink:href="#geo-fill"/>
+
                                             </svg>
                                             <small>Earth</small>
                                         </li>
                                         <li className="d-flex align-items-center">
                                             <svg className="bi me-2" width="1em" height="1em">
-                                                <use xlink:href="#calendar3"/>
+
                                             </svg>
                                             <small>3d</small>
                                         </li>
@@ -167,13 +163,13 @@ const Features = (props) => {
                                         </li>
                                         <li className="d-flex align-items-center me-3">
                                             <svg className="bi me-2" width="1em" height="1em">
-                                                <use xlink:href="#geo-fill"/>
+
                                             </svg>
                                             <small>Pakistan</small>
                                         </li>
                                         <li className="d-flex align-items-center">
                                             <svg className="bi me-2" width="1em" height="1em">
-                                                <use xlink:href="#calendar3"/>
+
                                             </svg>
                                             <small>4d</small>
                                         </li>
@@ -195,13 +191,13 @@ const Features = (props) => {
                                         </li>
                                         <li className="d-flex align-items-center me-3">
                                             <svg className="bi me-2" width="1em" height="1em">
-                                                <use xlink:href="#geo-fill"/>
+
                                             </svg>
                                             <small>California</small>
                                         </li>
                                         <li className="d-flex align-items-center">
                                             <svg className="bi me-2" width="1em" height="1em">
-                                                <use xlink:href="#calendar3"/>
+
                                             </svg>
                                             <small>5d</small>
                                         </li>
@@ -221,7 +217,7 @@ const Features = (props) => {
                     <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
                         <div className="col d-flex align-items-start">
                             <svg className="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                                <use xlink:href="#bootstrap"/>
+
                             </svg>
                             <div>
                                 <h3 className="fw-bold mb-0 fs-4">Featured title</h3>
@@ -230,7 +226,7 @@ const Features = (props) => {
                         </div>
                         <div className="col d-flex align-items-start">
                             <svg className="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                                <use xlink:href="#cpu-fill"/>
+
                             </svg>
                             <div>
                                 <h3 className="fw-bold mb-0 fs-4">Featured title</h3>
@@ -239,7 +235,7 @@ const Features = (props) => {
                         </div>
                         <div className="col d-flex align-items-start">
                             <svg className="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                                <use xlink:href="#calendar3"/>
+
                             </svg>
                             <div>
                                 <h3 className="fw-bold mb-0 fs-4">Featured title</h3>
@@ -248,7 +244,7 @@ const Features = (props) => {
                         </div>
                         <div className="col d-flex align-items-start">
                             <svg className="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                                <use xlink:href="#home"/>
+
                             </svg>
                             <div>
                                 <h3 className="fw-bold mb-0 fs-4">Featured title</h3>
@@ -257,7 +253,7 @@ const Features = (props) => {
                         </div>
                         <div className="col d-flex align-items-start">
                             <svg className="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                                <use xlink:href="#speedometer2"/>
+
                             </svg>
                             <div>
                                 <h3 className="fw-bold mb-0 fs-4">Featured title</h3>
@@ -266,7 +262,7 @@ const Features = (props) => {
                         </div>
                         <div className="col d-flex align-items-start">
                             <svg className="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                                <use xlink:href="#toggles2"/>
+
                             </svg>
                             <div>
                                 <h3 className="fw-bold mb-0 fs-4">Featured title</h3>
@@ -275,7 +271,7 @@ const Features = (props) => {
                         </div>
                         <div className="col d-flex align-items-start">
                             <svg className="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                                <use xlink:href="#geo-fill"/>
+
                             </svg>
                             <div>
                                 <h3 className="fw-bold mb-0 fs-4">Featured title</h3>
@@ -284,7 +280,7 @@ const Features = (props) => {
                         </div>
                         <div className="col d-flex align-items-start">
                             <svg className="bi text-muted flex-shrink-0 me-3" width="1.75em" height="1.75em">
-                                <use xlink:href="#tools"/>
+
                             </svg>
                             <div>
                                 <h3 className="fw-bold mb-0 fs-4">Featured title</h3>
@@ -313,7 +309,7 @@ const Features = (props) => {
                                 <div
                                     className="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
                                     <svg className="bi" width="1em" height="1em">
-                                        <use xlink:href="#collection"/>
+
                                     </svg>
                                 </div>
                                 <h4 className="fw-semibold mb-0">Featured title</h4>
@@ -325,7 +321,7 @@ const Features = (props) => {
                                 <div
                                     className="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
                                     <svg className="bi" width="1em" height="1em">
-                                        <use xlink:href="#gear-fill"/>
+
                                     </svg>
                                 </div>
                                 <h4 className="fw-semibold mb-0">Featured title</h4>
@@ -337,7 +333,7 @@ const Features = (props) => {
                                 <div
                                     className="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
                                     <svg className="bi" width="1em" height="1em">
-                                        <use xlink:href="#speedometer"/>
+
                                     </svg>
                                 </div>
                                 <h4 className="fw-semibold mb-0">Featured title</h4>
@@ -349,7 +345,7 @@ const Features = (props) => {
                                 <div
                                     className="feature-icon-small d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-4 rounded-3">
                                     <svg className="bi" width="1em" height="1em">
-                                        <use xlink:href="#table"/>
+
                                     </svg>
                                 </div>
                                 <h4 className="fw-semibold mb-0">Featured title</h4>
@@ -377,7 +373,6 @@ const Features = (props) => {
                             This is the first column.</p>
                         <p><a className="btn btn-secondary" href="#">View details &raquo;</a></p>
                     </div>
-                    <!-- /.col-lg-4 -->
                     <div className="col-lg-4">
                         <svg className="bd-placeholder-img rounded-circle" width="140" height="140"
                              xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
@@ -391,7 +386,6 @@ const Features = (props) => {
                             second column.</p>
                         <p><a className="btn btn-secondary" href="#">View details &raquo;</a></p>
                     </div>
-                    <!-- /.col-lg-4 -->
                     <div className="col-lg-4">
                         <svg className="bd-placeholder-img rounded-circle" width="140" height="140"
                              xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140"
@@ -404,8 +398,7 @@ const Features = (props) => {
                         <p>And lastly this, the third column of representative placeholder content.</p>
                         <p><a className="btn btn-secondary" href="#">View details &raquo;</a></p>
                     </div>
-                    <!-- /.col-lg-4 -->
-                </div><!-- /.row -->
+                </div>
             )
         case 7:
             return (
@@ -491,7 +484,6 @@ const Features = (props) => {
                             <div
                                 className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#collection"/>
                                 </svg>
                             </div>
                             <h3 className="fs-2">Featured title</h3>
@@ -500,7 +492,6 @@ const Features = (props) => {
                             <a href="#" className="icon-link d-inline-flex align-items-center">
                                 Call to action
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#chevron-right"/>
                                 </svg>
                             </a>
                         </div>
@@ -508,7 +499,6 @@ const Features = (props) => {
                             <div
                                 className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#people-circle"/>
                                 </svg>
                             </div>
                             <h3 className="fs-2">Featured title</h3>
@@ -517,7 +507,6 @@ const Features = (props) => {
                             <a href="#" className="icon-link d-inline-flex align-items-center">
                                 Call to action
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#chevron-right"/>
                                 </svg>
                             </a>
                         </div>
@@ -525,7 +514,6 @@ const Features = (props) => {
                             <div
                                 className="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#toggles2"/>
                                 </svg>
                             </div>
                             <h3 className="fs-2">Featured title</h3>
@@ -534,7 +522,6 @@ const Features = (props) => {
                             <a href="#" className="icon-link d-inline-flex align-items-center">
                                 Call to action
                                 <svg className="bi" width="1em" height="1em">
-                                    <use xlink:href="#chevron-right"/>
                                 </svg>
                             </a>
                         </div>

@@ -18,10 +18,14 @@ const AppRouter = () => {
 
     useEffect(() => {
         fetchPages().then(data => {
-            if (data !== "" && data.pages !== null) {
+            console.log(data)
+            if (data !== "" && data.webpages !== null) {
                 console.log('setting current pages')
-                let obtained_pages = JSON.parse(data.pages)
+                let obtained_pages = data.webpages
                 console.log(obtained_pages)
+                for (let page of obtained_pages) {
+                    page.components = JSON.parse(page.components)
+                }
                 admin.setCurrentPages(obtained_pages)
             } else {
                 console.log('empty')
@@ -55,7 +59,7 @@ const AppRouter = () => {
                 admin.currentPages.length !== 0 ?
 
                     admin.currentPages.length === 1 ?
-                        <Route key={admin.currentPages[0].pageId} path={"/"} exact >
+                        <Route key={admin.currentPages[0].id} path={"/"} exact >
 
                             {
                                 admin.currentPages[0].components.map( ( { component_id, key } ) =>
@@ -67,7 +71,7 @@ const AppRouter = () => {
                         :
                         admin.currentPages.map( page =>
 
-                            <Route key={page.pageId} path={page.pageUrl} exact >
+                            <Route key={page.id} path={page.url} exact >
 
                                 {
                                     page.components.map( ( { component_id, key } ) =>

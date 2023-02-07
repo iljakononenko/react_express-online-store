@@ -76,10 +76,16 @@ const TypeBrand = sequelize.define('type_brand', {
 const ServiceWebSites = sequelize.define('service_web_sites', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     system_id: {type: DataTypes.INTEGER},
-    pages: {type: DataTypes.TEXT},
     name: {type: DataTypes.STRING},
     subdomain: {type: DataTypes.STRING},
     layout_type_id: {type: DataTypes.INTEGER}
+})
+
+const WebPage = sequelize.define('webpage', {
+    id: {type: DataTypes.STRING, primaryKey: true},
+    name: {type: DataTypes.STRING},
+    url: {type: DataTypes.STRING},
+    components: {type: DataTypes.TEXT}
 })
 
 const Order = sequelize.define('order', {
@@ -148,6 +154,9 @@ Rating.belongsTo(ShopItem)
 ShopItem.hasMany(ItemInfo, {as: "info"})
 ItemInfo.belongsTo(ShopItem)
 
+ServiceWebSites.hasMany(WebPage)
+WebPage.belongsTo(ServiceWebSites)
+
 Type.belongsToMany(Brand, {through: TypeBrand})
 Brand.belongsToMany(Type, {through: TypeBrand})
 
@@ -163,6 +172,7 @@ module.exports = {
     TypeBrand,
     ItemInfo,
     ServiceWebSites,
+    WebPage,
     Order,
     OrderProduct
 }
