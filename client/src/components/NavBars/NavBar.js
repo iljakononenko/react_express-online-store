@@ -27,6 +27,7 @@ const NavBar = observer(( {props} ) => {
         if (isRealPage) {
             user.setIsAuth(false)
             user.setUser({})
+            localStorage.removeItem("token")
             history.push("/")
         }
     }

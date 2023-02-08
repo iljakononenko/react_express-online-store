@@ -70,7 +70,6 @@ const Cart = observer(() => {
 
     return (
         <>
-            <NavBar />
 
             <CartHeader cartStage={cartStage} />
 
@@ -80,7 +79,6 @@ const Cart = observer(() => {
 
             { !isLoading && cartStage === 3 ? <CartLastBlock previousStage={decrementCartStage} /> : "" }
 
-            <FooterBlock />
         </>
     );
 });

@@ -63,11 +63,11 @@ export const adminRoutes = [
 export const authRoutes = [
     {
         path: USER_PANEL_ROUTE,
-        Component: UserPanel
+        component_id: 12
     },
     {
         path: CART_ROUTE,
-        Component: Cart
+        component_id: 13
     },
 ]
 

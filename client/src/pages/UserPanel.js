@@ -11,8 +11,6 @@ import FooterBlock from "../components/page_blocks/Footer_block";
 
 const UserPanel = () => {
 
-    const {user} = useContext(Context);
-
     const panels = [
         {id: 1, name: "Orders"},
         {id: 2, name: "User data"}
@@ -22,7 +20,6 @@ const UserPanel = () => {
 
     return (
         <>
-            <NavBar />
             <Container className="d-flex mt-3">
                 <Col md={2}>
                     <ListGroup>
@@ -47,7 +44,6 @@ const UserPanel = () => {
                     }
                 </Col>
             </Container>
-            <FooterBlock />
         </>
     );
 };

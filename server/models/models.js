@@ -78,7 +78,7 @@ const ServiceWebSites = sequelize.define('service_web_sites', {
     system_id: {type: DataTypes.INTEGER},
     name: {type: DataTypes.STRING},
     subdomain: {type: DataTypes.STRING},
-    layout_type_id: {type: DataTypes.INTEGER}
+    layout_type_id: {type: DataTypes.INTEGER},
 })
 
 const WebPage = sequelize.define('webpage', {

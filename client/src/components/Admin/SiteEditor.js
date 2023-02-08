@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import "../../editor.css"
-import {getBasicBlock, getDefaultNodesForBasicBlocks, renderCoreComponent} from "../../utils/components_map";
+import {
+    getBasicBlock,
+    getDefaultNodesForBasicBlocks,
+    renderCoreComponent,
+    sortComponents
+} from "../../utils/components_map";
 import {getDivObject, getTextObject} from "../../utils/elements_utils";
 import {FaAlignCenter, FaAlignLeft, FaAlignRight, FaAngleLeft, FaPlus, FaRegTrashAlt} from 'react-icons/fa';
 import NavBar_adminEditor from "../NavBars/NavBar_adminEditor";
@@ -16,6 +21,8 @@ const uuid = require('uuid')
 
 const SiteEditor = () => {
 
+    let header;
+    let footer;
     let test = single_page_starting_elements;
     const {id} = useParams()
 
@@ -60,30 +67,45 @@ const SiteEditor = () => {
     const [isNewSite, setIsNewSite] = useState(false);
 
     useEffect(() => {
-        if (true) {
-            fetchOneSite(id).then(data => {
-                if ( data != null && data.webpages != null ) {
-                    console.log(data.webpages)
-                    let obtained_pages = data.webpages
-                    for (let page of obtained_pages) {
+
+        fetchOneSite(id).then(data => {
+            if ( data != null && data.webpages != null ) {
+
+                let obtained_pages = data.webpages
+
+                // extracting header and footer from website obtained
+                let page_template = obtained_pages.find(page => page.url === "0");
+                header = page_template.webpage_components.find(component => component.component_id === 0);
+                footer = page_template.webpage_components.find(component => component.component_id === 11);
+                header.nodes = JSON.parse(header.nodes)
+                footer.nodes = JSON.parse(footer.nodes)
+
+                for (let page of obtained_pages) {
+
+                    if (page.url !== "0") {
                         for (let component of page.webpage_components) {
                             component.nodes = JSON.parse(component.nodes)
                         }
-                        page.webpage_components = page.webpage_components.sort(function(a, b) {
-                            return a.order - b.order;
-                        })
+                        page.webpage_components = sortComponents(page.webpage_components)
+
+                        page.webpage_components.unshift(header)
+                        page.webpage_components.push(footer)
                     }
-                    setPages(obtained_pages);
-                    console.log(obtained_pages);
-                } else {
-                    setPages(test);
-                    setIsNewSite(true);
+
                 }
-            })
-        } else {
-            setPages(test);
-            setIsNewSite(true);
-        }
+
+                obtained_pages = obtained_pages.sort(function(a, b) {
+                    return new Date(a.createdAt) - new Date(b.createdAt);
+                })
+
+                setPages(obtained_pages);
+                console.log(obtained_pages);
+            } else {
+                setPages(test);
+                setIsNewSite(true);
+            }
+        })
+
     }, [reload])
 
     const [editingPage, setEditingPage] = useState(null);
@@ -95,6 +117,8 @@ const SiteEditor = () => {
     }
 
     function backToPages() {
+        setEditingTextSelected(false)
+        setEditingElement({})
         setIsEditingPage(true);
         setEditingPage(null);
     }
@@ -151,18 +175,25 @@ const SiteEditor = () => {
         let new_block = {key: uuid.v4(), component_id: component_id, component_name: "New Block", order: editingPage.webpage_components.length + 1, nodes: getDefaultNodesForBasicBlocks(component_id), tag: "new"};
         setPages( pages.map( page => {
             if ( page.id === editingPage.id ) {
-                return {...page, webpage_components: [...page.webpage_components, new_block] }
+                let new_components = [...page.webpage_components, new_block];
+                new_components = sortComponents(new_components);
+                return {...page,  webpage_components: new_components}
             } else {
                 return page
             }
         }) )
         setEditingPage( prevState => {
-            return {...prevState, webpage_components: [...prevState.webpage_components, new_block]};
+            let new_components = [...prevState.webpage_components, new_block];
+            new_components = sortComponents(new_components);
+            return {...prevState, webpage_components: new_components };
         } )
     }
 
     function addPage() {
-        let new_page = {id: uuid.v4(), name: "New page", url: "/new", webpage_components: [{key: uuid.v4(), component_id: 0, component_name: "Header", order: 1, nodes: default_nodes[0]}], tag: "new", serviceWebSiteId: id};
+        let new_page = {id: uuid.v4(), name: "New page", url: "/new", webpage_components: [], tag: "new", serviceWebSiteId: id};
+        new_page.webpage_components.push(header)
+        new_page.webpage_components.push(footer)
+        new_page.webpage_components = sortComponents(new_page.webpage_components)
         setPages( prevState => [...prevState, new_page] )
     }
 
@@ -217,7 +248,6 @@ const SiteEditor = () => {
     }
 
     function saveChanges() {
-        console.log(isNewSite)
         if (isNewSite) {
             let page_to_send = JSON.stringify(test);
             createSite(page_to_send).then((data) => {
@@ -225,7 +255,19 @@ const SiteEditor = () => {
                 setOperationSuccessToast(true)
             });
         } else {
-            editSite(id, pages).then((data) => {
+            let pages_to_submit =  JSON.parse(JSON.stringify(pages));
+            pages_to_submit = pages_to_submit.map(page => {
+                if (page.url === "0") {
+                    return page;
+                } else {
+                    page.webpage_components = page.webpage_components.filter(component => component.component_id !== 0 && component.component_id !== 11);
+                    return page
+                }
+            })
+
+            // console.log(pages_to_submit)
+
+            editSite(id, pages_to_submit).then((data) => {
                 console.log(data)
                 setOperationSuccessToast(true)
             });
@@ -254,6 +296,12 @@ const SiteEditor = () => {
 
             setEditingPage(page_updated)
             setPages( pages.map( page => {
+                if (page.url === "0") {
+                    return {...page, webpage_components: [
+                        page_updated.webpage_components.find(component => component.component_id === 0),
+                        page_updated.webpage_components.find(component => component.component_id === 11)
+                    ]}
+                }
                 if ( page.id === editingPage.id ) {
                     return page_updated
                 } else {
@@ -328,8 +376,8 @@ const SiteEditor = () => {
                     {
                         isEditingPage ?
                             <div>
-                                { pages.map(({id, name, component, tag}) =>
-                                    tag != null && tag === "delete" ?
+                                { pages.map(({id, name, tag, url}) =>
+                                    (tag != null && tag === "delete") || url === "0" ?
                                         ""
                                         :
                                         <div key={id} style={menu_item} onClick={() => editPage(id) } >
@@ -352,22 +400,24 @@ const SiteEditor = () => {
                                     <FaAngleLeft />Back to pages
                                 </span>
                                 <div className={'my-3'}>
+                                    {editingPage.url !== "0" && <>
                                     <span className={'text-white me-2'}>Page url:</span>
-                                    <input style={{ background: "#374143", border: "3px solid rgb(20, 26, 27)", color: "#fff", padding: '2px', paddingLeft: "12px", width: "180px" }}
+                                     <input style={{ background: "#374143", border: "3px solid rgb(20, 26, 27)", color: "#fff", padding: '2px', paddingLeft: "12px", width: "180px" }}
                                            type="text" value={editingPage.url}
                                            onChange={ e => changePageUrl(e.target.value) }
                                            onClick={ e => {e.stopPropagation()} }
                                     />
+                                    </>}
                                 </div>
                                 { editingPage.webpage_components.map(({key, component_id, component_name, tag}) =>
-                                    tag != null && tag === "delete" ?
+                                    (tag != null && tag === "delete") || (editingPage.url !== "0" && (component_id === 0 || component_id === 11)) ?
                                         ""
                                         :
                                         <div key={key} style={menu_item} >
                                             <input style={{ background: "#374143", border: "1px solid #374143", color: "#fff" }}
-                                                   type="text" value={component_name}
-                                                   onChange={ e => changeComponentName(e.target.value, key) }
-                                                   onClick={ e => {e.stopPropagation()} }
+                                               type="text" value={component_name}
+                                               onChange={ e => changeComponentName(e.target.value, key) }
+                                               onClick={ e => {e.stopPropagation()} }
                                             />
                                             <span style={{ padding: "4px" }}
                                                   onClick={e => { e.stopPropagation(); removeBlock(key) } }
@@ -420,28 +470,40 @@ const SiteEditor = () => {
 
                         <div className={'editing-window'} onClick={(e) => {
                                 if (e.target.dataset.id != null) {
-                                    console.log("previousEditingElement")
-                                    console.log(previousEditingElement)
 
-                                    if (Object.keys(previousEditingElement).length != 0) {
+                                    if (Object.keys(previousEditingElement).length !== 0) {
                                         previousEditingElement.target.className = previousEditingElement.target.className.replace('admin-editing', "")
                                     }
 
-                                    setEditingTextSelected(true)
-                                    setEditingElement({id: e.target.dataset.id, text: e.target.innerText})
-                                    setPreviousEditingElement(e)
-                                    e.target.className += " admin-editing";
+                                    if (e.target.dataset.id == previousEditingElement.id) {
+                                        e.target.className.replace('admin-editing', '')
+                                        setEditingTextSelected(false)
+                                        setEditingElement({})
+                                        setPreviousEditingElement({})
+                                    } else {
+                                        console.log("previousEditingElement")
+                                        console.log(previousEditingElement)
+
+                                        if (Object.keys(previousEditingElement).length !== 0) {
+                                            previousEditingElement.target.className = previousEditingElement.target.className.replace('admin-editing', "")
+                                        }
+
+                                        setEditingTextSelected(true)
+                                        setEditingElement({id: e.target.dataset.id, text: e.target.innerText})
+                                        setPreviousEditingElement({id: e.target.dataset.id, target: e.target})
+                                        e.target.className += " admin-editing";
+                                    }
                                 }
                             }}
                         >
 
 {/* ------------------------------------------------------------- RENDERING BLOCKS ------------------------------------------------------------- */}
 
-                            {/*{ Object.keys(coreComponent).length !== 0 ? coreComponent : "test" }*/}
                             {
                                 isEditingPage ?
                                     <h1>Select page to edit</h1>
                                     :
+
                                     editingPage.webpage_components.map(({component_id, key, nodes, tag}) =>
                                         tag != null && tag === "delete" ?
                                             ""

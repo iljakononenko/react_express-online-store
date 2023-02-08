@@ -102,8 +102,43 @@ class UserController {
             let billingAddressData = userData.find(userDataInstance => {return userDataInstance.typeId === 1});
             let deliveryAddressData = userData.find(userDataInstance => {return userDataInstance.typeId === 2});
 
-            await UserData.update(billingAddressData, {where: {id: billingAddressData.id} })
-            await UserData.update(deliveryAddressData, {where: {id: deliveryAddressData.id} })
+            const billingAddress = await UserData.findOne({where: { typeId: 1, userId: userId }})
+            const deliveryAddress = await UserData.findOne({where: { typeId: 2, userId: userId }})
+
+            if (!billingAddress) {
+                await UserData.create({
+                    typeId: 1,
+                    userId: userId,
+                    firstName: billingAddressData.firstName,
+                    lastName: billingAddressData.lastName,
+                    email: billingAddressData.email,
+                    phone: billingAddressData.phone,
+                    address: billingAddressData.address,
+                    country: billingAddressData.country,
+                    city: billingAddressData.city,
+                    postal: billingAddressData.postal,
+                })
+
+            } else {
+                await UserData.update(billingAddressData, {where: {id: billingAddressData.id} })
+            }
+
+            if (!deliveryAddress) {
+                await UserData.create({
+                    typeId: 2,
+                    userId: userId,
+                    firstName: deliveryAddressData.firstName,
+                    lastName: deliveryAddressData.lastName,
+                    email: deliveryAddressData.email,
+                    phone: deliveryAddressData.phone,
+                    address: deliveryAddressData.address,
+                    country: deliveryAddressData.country,
+                    city: deliveryAddressData.city,
+                    postal: deliveryAddressData.postal,
+                })
+            } else {
+                await UserData.update(deliveryAddressData, {where: {id: deliveryAddressData.id} })
+            }
 
             res.send({message: "success", status: 200})
 

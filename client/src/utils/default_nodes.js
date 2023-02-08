@@ -193,80 +193,82 @@ export const default_nodes = {
             ]),
         ])
     ],
-    10  : getDivObject("", [
-        getDivObject("position-relative p-3 p-md-5 m-md-3 text-center bg-light", [
-            getDivObject("col-md-5 p-lg-5 mx-auto my-5", [
-                getTextObject( "Punny headline", "display-4 fw-normal", H1_TAG),
-                getTextObject( "And an even wittier subheading to boot. Jumpstart your marketing efforts with this example based on Apple’s marketing pages.", "lead fw-normal", P_TAG),
-                getAnchorObject( "Coming soon", "btn btn-outline-secondary", A_TAG, "#"),
-                getDivObject("product-device shadow-sm d-none d-md-block", []),
-                getDivObject("product-device product-device-2 shadow-sm d-none d-md-block", []),
-            ])
-        ]),
-        getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
-            getDivObject("text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                getDivObject("my-3 py-3", [
-                    getTextObject( "Another headline", "display-5", H2_TAG),
-                    getTextObject( "And an even wittier subheading.", "lead", P_TAG),
-                ]),
-                getDivObject("bg-light shadow-sm mx-auto block", []),
+    10  : [
+        getDivObject("", [
+            getDivObject("position-relative p-3 p-md-5 m-md-3 text-center bg-light", [
+                getDivObject("col-md-5 p-lg-5 mx-auto my-5", [
+                    getTextObject( "Punny headline", "display-4 fw-normal", H1_TAG),
+                    getTextObject( "And an even wittier subheading to boot. Jumpstart your marketing efforts with this example based on Apple’s marketing pages.", "lead fw-normal", P_TAG),
+                    getAnchorObject( "Coming soon", "btn btn-outline-secondary", A_TAG, "#"),
+                    getDivObject("product-device shadow-sm d-none d-md-block", []),
+                    getDivObject("product-device product-device-2 shadow-sm d-none d-md-block", []),
+                ])
             ]),
-            getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                getDivObject("my-3 py-3", [
-                    getTextObject( "Another headline", "display-5", H2_TAG),
-                    getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+            getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
+                getDivObject("text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
+                    getDivObject("my-3 py-3", [
+                        getTextObject( "Another headline", "display-5", H2_TAG),
+                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                    ]),
+                    getDivObject("bg-light shadow-sm mx-auto block", []),
                 ]),
-                getDivObject("bg-dark shadow-sm mx-auto block", []),
-            ]),
-        ]),
-        getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
-            getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                getDivObject("my-3 py-3", [
-                    getTextObject( "Another headline", "display-5", H2_TAG),
-                    getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
+                    getDivObject("my-3 py-3", [
+                        getTextObject( "Another headline", "display-5", H2_TAG),
+                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                    ]),
+                    getDivObject("bg-dark shadow-sm mx-auto block", []),
                 ]),
-                getDivObject("bg-dark shadow-sm mx-auto block", []),
             ]),
-            getDivObject("text-bg-primary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                getDivObject("my-3 py-3", [
-                    getTextObject( "Another headline", "display-5", H2_TAG),
-                    getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+            getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
+                getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
+                    getDivObject("my-3 py-3", [
+                        getTextObject( "Another headline", "display-5", H2_TAG),
+                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                    ]),
+                    getDivObject("bg-dark shadow-sm mx-auto block", []),
                 ]),
-                getDivObject("bg-light shadow-sm mx-auto block", []),
-            ]),
-        ]),
-        getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
-            getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                getDivObject("my-3 py-3", [
-                    getTextObject( "Another headline", "display-5", H2_TAG),
-                    getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                getDivObject("text-bg-primary me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
+                    getDivObject("my-3 py-3", [
+                        getTextObject( "Another headline", "display-5", H2_TAG),
+                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                    ]),
+                    getDivObject("bg-light shadow-sm mx-auto block", []),
                 ]),
-                getDivObject("bg-body shadow-sm mx-auto block", []),
             ]),
-            getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                getDivObject("my-3 py-3", [
-                    getTextObject( "Another headline", "display-5", H2_TAG),
-                    getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+            getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
+                getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
+                    getDivObject("my-3 py-3", [
+                        getTextObject( "Another headline", "display-5", H2_TAG),
+                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                    ]),
+                    getDivObject("bg-body shadow-sm mx-auto block", []),
                 ]),
-                getDivObject("bg-body shadow-sm mx-auto block", []),
-            ]),
-        ]),
-        getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
-            getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                getDivObject("my-3 py-3", [
-                    getTextObject( "Another headline", "display-5", H2_TAG),
-                    getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
+                    getDivObject("my-3 py-3", [
+                        getTextObject( "Another headline", "display-5", H2_TAG),
+                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                    ]),
+                    getDivObject("bg-body shadow-sm mx-auto block", []),
                 ]),
-                getDivObject("bg-body shadow-sm mx-auto block", []),
             ]),
-            getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                getDivObject("my-3 py-3", [
-                    getTextObject( "Another headline", "display-5", H2_TAG),
-                    getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+            getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
+                getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
+                    getDivObject("my-3 py-3", [
+                        getTextObject( "Another headline", "display-5", H2_TAG),
+                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                    ]),
+                    getDivObject("bg-body shadow-sm mx-auto block", []),
                 ]),
-                getDivObject("bg-body shadow-sm mx-auto block", []),
+                getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
+                    getDivObject("my-3 py-3", [
+                        getTextObject( "Another headline", "display-5", H2_TAG),
+                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
+                    ]),
+                    getDivObject("bg-body shadow-sm mx-auto block", []),
+                ]),
             ]),
-        ]),
-    ])
+        ])
+    ]
 
 }

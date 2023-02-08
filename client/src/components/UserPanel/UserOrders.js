@@ -35,6 +35,9 @@ const UserOrders = () => {
     return (
         <div>
             {
+                orders.length < 1 ?
+                    <h1 className={'text-center'}>No orders yet</h1>
+                :
                 orders.map(order =>
                         <div key={order.id} style={ isOpen ? { ...orderRowStyles, maxHeight: "720px" } : { ...orderRowStyles, maxHeight: "350px" } } >
                             <div className="d-flex justify-content-between w-100 mb-3" >

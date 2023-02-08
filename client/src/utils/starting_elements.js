@@ -5,16 +5,30 @@ const uuid = require('uuid')
 export const shop_starting_elements = [
     {
         "id": uuid.v4(),
-        "name": "Shop",
-        "url": "/",
-        "webpage_components": [
+        "name": "Page template",
+        "url": "0",
+        webpage_components: [
             {
                 "key": uuid.v4(),
                 "component_id": 0,
                 "component_name": "Header",
-                "order": 1,
+                "order": 0,
                 "nodes": default_nodes[0]
             },
+            {
+                "key": uuid.v4(),
+                "component_id": 11,
+                "component_name": "Footer",
+                "order": 99999999,
+                "nodes": []
+            },
+        ]
+    },
+    {
+        "id": uuid.v4(),
+        "name": "Shop",
+        "url": "/",
+        "webpage_components": [
             {
                 "key": uuid.v4(),
                 "component_id": 1,
@@ -38,13 +52,6 @@ export const shop_starting_elements = [
         "webpage_components": [
             {
                 "key": uuid.v4(),
-                "component_id": 0,
-                "component_name": "Header",
-                "order": 1,
-                "nodes": default_nodes[0]
-            },
-            {
-                "key": uuid.v4(),
                 "component_id": 5,
                 "component_name": "Item info",
                 "order": 2,
@@ -57,13 +64,6 @@ export const shop_starting_elements = [
         "name": "Login",
         "url": "/login",
         "webpage_components": [
-            {
-                "key": uuid.v4(),
-                "component_id": 0,
-                "component_name": "Header",
-                "order": 1,
-                "nodes": default_nodes[0]
-            },
             {
                 "key": uuid.v4(),
                 "component_id": 3,
@@ -80,13 +80,6 @@ export const shop_starting_elements = [
         "webpage_components": [
             {
                 "key": uuid.v4(),
-                "component_id": 0,
-                "component_name": "Header",
-                "order": 1,
-                "nodes": default_nodes[0]
-            },
-            {
-                "key": uuid.v4(),
                 "component_id": 4,
                 "component_name": "Registration",
                 "order": 2,
@@ -97,6 +90,27 @@ export const shop_starting_elements = [
 ]
 
 export const single_page_starting_elements = [
+    {
+        "id": uuid.v4(),
+        "name": "Page template",
+        "url": "0",
+        webpage_components: [
+            {
+                "key": uuid.v4(),
+                "component_id": 0,
+                "component_name": "Header",
+                "order": 1,
+                "nodes": default_nodes[0]
+            },
+            {
+                "key": uuid.v4(),
+                "component_id": 11,
+                "component_name": "Footer",
+                "order": 2,
+                "nodes": []
+            },
+        ]
+    },
     {
         "id": uuid.v4(),
         "name": "Landing",

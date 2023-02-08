@@ -18,6 +18,22 @@ const UserData = () => {
 
     useEffect(async () => {
         let data = await getUserdata()
+        if (data.length === 0) {
+            let new_billingAddress = {
+                typeId: 1,
+                firstName: "",
+                lastName: "",
+                email: "",
+                phone: "",
+                address: "",
+                country: "",
+                city: "",
+                postal: "",
+            }
+            let new_deliveryAddress = {...new_billingAddress, typeId: 2}
+            data = [new_billingAddress, new_deliveryAddress]
+        }
+
         setUserData(data)
 
         let data_1_values = Object.entries(data[0]);

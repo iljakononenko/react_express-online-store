@@ -41,7 +41,6 @@ const ItemPage = observer(() => {
 
     return (
         <>
-            <NavBar />
             <Container className="d-flex mt-3">
                 <Col md={4}>
                     <Image width={300} height={300} src={item.img ? process.env.REACT_APP_URL_API + item.img : itemImg} />

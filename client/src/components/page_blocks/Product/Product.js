@@ -3,7 +3,7 @@ import {renderCoreComponent} from "../../../utils/components_map";
 
 const Product = ({props}) => {
 
-    let result = renderCoreComponent(props.id, props.component_id, props.props)
+    let result = renderCoreComponent(props[0].id, props[0].component_id, props[0].props)
 
     return (
         result

@@ -11,6 +11,8 @@ import {getBasicBlock} from "../utils/components_map";
 
 const AppRouter = () => {
 
+    const [header, setHeader] = useState({});
+    const [footer, setFooter] = useState({});
     const {user} = useContext(Context);
     const {admin} = useContext(Context);
     const location = useLocation();
@@ -22,16 +24,40 @@ const AppRouter = () => {
             if (data !== "" && data.webpages !== null) {
                 // console.log('setting current pages')
                 let obtained_pages = data.webpages
-                // console.log(obtained_pages)
-                for (let page of obtained_pages) {
-                    for (let component of page.webpage_components) {
-                        component.nodes = JSON.parse(component.nodes)
-                    }
-                    page.webpage_components = page.webpage_components.sort(function(a, b) {
-                        return a.order - b.order;
-                    })
-                }
+
                 console.log(obtained_pages)
+
+                // extracting header and footer from website obtained
+                let page_template = obtained_pages.find(page => page.url === "0")
+                console.log("page_template")
+                console.log(page_template)
+                let header1 = page_template.webpage_components.find(component => component.component_id === 0)
+                header1.nodes = JSON.parse(header1.nodes)
+                setHeader(header1);
+
+                let footer1 = page_template.webpage_components.find(component => component.component_id === 11)
+                footer1.nodes = JSON.parse(footer1.nodes)
+                setFooter(footer1);
+
+                for (let page of obtained_pages) {
+
+                    if (page.url !== "0") {
+                        for (let component of page.webpage_components) {
+                            component.nodes = JSON.parse(component.nodes)
+                        }
+                        page.webpage_components = page.webpage_components.sort(function(a, b) {
+                            return a.order - b.order;
+                        })
+
+                        page.webpage_components.unshift(header1)
+                        page.webpage_components.push(footer1)
+                    }
+
+                }
+
+                console.log(header)
+
+                // console.log(obtained_pages)
                 admin.setCurrentPages(obtained_pages)
             } else {
                 console.log('empty')
@@ -47,8 +73,7 @@ const AppRouter = () => {
         return getBasicBlock(component_id, key, nodes);
     }
 
-    console.log("admin isAuth")
-    console.log(admin.admin)
+    console.log(header)
 
     return (
         <Switch>
@@ -60,29 +85,20 @@ const AppRouter = () => {
                 <Route key={path} path={path} component={Component} exact />
             )}
 
-            {user.isAuth && authRoutes.map(({path, Component}) =>
-                <Route key={path} path={path} component={Component} exact />
+            {user.isAuth && authRoutes.map(({path, component_id}) =>
+                <Route key={path} path={path} exact >
+                    {getBlock(header.component_id, header.key, header.nodes)}
+                    {getBasicBlock(component_id, "", "")}
+                    {getBlock(footer.component_id, footer.key, footer.nodes)}
+                </Route>
             )}
 
             {
                 admin.currentPages.length !== 0 ?
 
-                    admin.currentPages.length === 1 ?
+                    admin.currentPages.map( page =>
 
-                        <Route key={admin.currentPages[0].id} path={"/"} exact >
-
-                            {
-                                admin.currentPages[0].webpage_components.map( ( { component_id, key, nodes } ) =>
-                                    getBlock(component_id, key, nodes)
-                                )
-                            }
-
-                        </Route>
-
-                        :
-
-                        admin.currentPages.map( page =>
-
+                        page.url !== "0" ?
                             <Route key={page.id} path={page.url} exact >
 
                                 {
@@ -92,8 +108,15 @@ const AppRouter = () => {
                                 }
 
                             </Route>
-                        )
+
+                            :
+
+                            null
+
+                    )
+
                     :
+
                     null
             }
 

@@ -22,6 +22,8 @@ import Img from "../components/core_components/Img";
 import Button from "../components/core_components/Button";
 import ListBlock from "../components/core_components/ListBlock";
 import ListElement from "../components/core_components/ListElement";
+import Cart from "../pages/Cart";
+import UserPanel from "../pages/UserPanel";
 
 export const basicBlocks = [
     {block_id: 0, block_name: "Header", icon: <FaBars size={36} />},
@@ -64,6 +66,10 @@ export const getBasicBlock = (component_id, key, props) => {
             return <Product key={key} props={props}></Product>
         case 11:
             return <FooterBlock key={key} props={props}></FooterBlock>
+        case 12:
+            return <UserPanel />
+        case 13:
+            return <Cart />
 
     }
 }
@@ -90,4 +96,10 @@ export const renderCoreComponent = (key, component_id, props) => {
 
 export const getDefaultNodesForBasicBlocks = (component_id) => {
     return default_nodes[component_id]
+}
+
+export const sortComponents = (components) => {
+    return components.sort(function(a, b) {
+        return a.order - b.order;
+    })
 }

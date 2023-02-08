@@ -40,8 +40,6 @@ const App = observer(() => {
     useEffect(() => {
         if (localStorage.getItem('admin_token') != null) {
             checkAdmin().then(data => {
-                console.log("data")
-                console.log(data)
                 if (data != null) {
                     admin.setAdmin(data)
                     admin.setIsAuth(true)
