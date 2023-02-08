@@ -31,10 +31,12 @@ const NavBar = observer(( {props} ) => {
         }
     }
 
+    console.log(props)
+
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
-                <NavLink style={{color: "white", textDecoration: "none"}} to={ isRealPage ? SHOP_ROUTE : "#"}>ProdSell</NavLink>
+                <NavLink style={{color: "white", textDecoration: "none"}} data-id={props[0].id} to={ isRealPage ? SHOP_ROUTE : "#"}>{props[0] != null ? props[0].props.text : "ProdSell"}</NavLink>
                 {user.isAuth ?
                     <div className={'d-flex align-items-center'}>
                         <p className={'mb-0 text-white me-2'}>Hello!</p>

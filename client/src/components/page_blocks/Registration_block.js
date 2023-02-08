@@ -4,8 +4,9 @@ import {NavLink, useHistory, useLocation} from "react-router-dom";
 import {editor_links_style, EDITOR_ROUTE, LOGIN_ROUTE, SHOP_ROUTE} from "../../utils/consts";
 import {Context} from "../../index";
 import {registration} from "../../http/userApi";
+import {renderCoreComponent} from "../../utils/components_map";
 
-const RegistrationBlock = () => {
+const RegistrationBlock = ({props}) => {
 
     const {user} = useContext(Context)
     const location = useLocation();
@@ -35,19 +36,19 @@ const RegistrationBlock = () => {
             style={{height: window.innerHeight - 54}}
         >
             <Card style={{width: 600}} className="p-5">
-                <h2 className="m-auto">Registration</h2>
+                {renderCoreComponent(props[0].key, props[0].component_id, props[0].props)}
                 <Form className="d-flex flex-column">
                     <Form.Control className="mt-3" placeholder="Input email" value={email} onChange={e => setEmail(e.target.value)}/>
                     <Form.Control className="mt-3" placeholder="Input password" type="password" value={password} onChange={e => setPassword(e.target.value)}/>
                     <div className="d-flex justify-content-between align-items-center mt-3">
                         <div>
-                            Already have account? <NavLink className="text-decoration-none" to={isRealPage ? LOGIN_ROUTE : "#"}>Log in!</NavLink>
+                            {renderCoreComponent(props[1].key, props[1].component_id, props[1].props)} <NavLink data-id={props[2].id} className="text-decoration-none" to={isRealPage ? LOGIN_ROUTE : "#"}>{props[2].props.text}</NavLink>
                         </div>
                         <Button
                             variant={"outline-success"}
                             onClick={click}
                         >
-                            Register
+                            {props[3].props.text}
                         </Button>
                     </div>
 

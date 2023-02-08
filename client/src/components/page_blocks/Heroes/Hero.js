@@ -1,13 +1,20 @@
 import React from 'react';
+import {renderCoreComponent} from "../../../utils/components_map";
 
-const Hero = (props) => {
+const Hero = ({props}) => {
+
+    console.log(props)
+
+    let result = renderCoreComponent(props[0].id, props[0].component_id, props[0].props)
+
+    return result;
 
     switch (props.variant) {
         // Centered Hero
         case 1:
             return (
                 <div className="px-4 py-5 my-5 text-center">
-                    <img className="d-block mx-auto mb-4" src="../../../assets/Hero/bootstrap-logo.svg" alt="" width="72"
+                    <img className="d-block mx-auto mb-4" src="" alt="" width="72"
                          height="57" />
                     <h1 className="display-5 fw-bold">Centered hero</h1>
                     <div className="col-lg-6 mx-auto">
@@ -94,7 +101,7 @@ const Hero = (props) => {
         default:
             return (
                 <div className="px-4 py-5 my-5 text-center">
-                    <img className="d-block mx-auto mb-4" src="../../../assets/Hero/bootstrap-logo.svg" alt="" width="72"
+                    <img className="d-block mx-auto mb-4" src="" alt="" width="72"
                          height="57" />
                     <h1 className="display-5 fw-bold">Centered hero</h1>
                     <div className="col-lg-6 mx-auto">

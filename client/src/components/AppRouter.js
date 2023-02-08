@@ -20,12 +20,15 @@ const AppRouter = () => {
         fetchPages().then(data => {
             console.log(data)
             if (data !== "" && data.webpages !== null) {
-                console.log('setting current pages')
+                // console.log('setting current pages')
                 let obtained_pages = data.webpages
-                console.log(obtained_pages)
+                // console.log(obtained_pages)
                 for (let page of obtained_pages) {
-                    page.components = JSON.parse(page.components)
+                    for (let component of page.webpage_components) {
+                        component.nodes = JSON.parse(component.nodes)
+                    }
                 }
+                console.log(obtained_pages)
                 admin.setCurrentPages(obtained_pages)
             } else {
                 console.log('empty')
@@ -37,8 +40,8 @@ const AppRouter = () => {
         return <Spinner animation={"grow"} />
     }
 
-    function getBlock(component_id, key) {
-        return getBasicBlock(component_id, key, {test: "First test"});
+    function getBlock(component_id, key, nodes) {
+        return getBasicBlock(component_id, key, nodes);
     }
 
     return (
@@ -59,23 +62,26 @@ const AppRouter = () => {
                 admin.currentPages.length !== 0 ?
 
                     admin.currentPages.length === 1 ?
+
                         <Route key={admin.currentPages[0].id} path={"/"} exact >
 
                             {
-                                admin.currentPages[0].components.map( ( { component_id, key } ) =>
-                                    getBlock(component_id, key)
+                                admin.currentPages[0].webpage_components.map( ( { component_id, key, nodes } ) =>
+                                    getBlock(component_id, key, nodes)
                                 )
                             }
 
                         </Route>
+
                         :
+
                         admin.currentPages.map( page =>
 
                             <Route key={page.id} path={page.url} exact >
 
                                 {
-                                    page.components.map( ( { component_id, key } ) =>
-                                        getBlock(component_id, key)
+                                    page.webpage_components.map( ( { component_id, key, nodes } ) =>
+                                        getBlock(component_id, key, nodes)
                                     )
                                 }
 

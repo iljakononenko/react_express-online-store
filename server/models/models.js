@@ -85,7 +85,13 @@ const WebPage = sequelize.define('webpage', {
     id: {type: DataTypes.STRING, primaryKey: true},
     name: {type: DataTypes.STRING},
     url: {type: DataTypes.STRING},
-    components: {type: DataTypes.TEXT}
+})
+
+const WebPageComponent = sequelize.define('webpage_component', {
+    key: {type: DataTypes.STRING, primaryKey: true},
+    component_id: {type: DataTypes.INTEGER},
+    component_name: {type: DataTypes.STRING},
+    nodes: {type: DataTypes.TEXT}
 })
 
 const Order = sequelize.define('order', {
@@ -157,6 +163,9 @@ ItemInfo.belongsTo(ShopItem)
 ServiceWebSites.hasMany(WebPage)
 WebPage.belongsTo(ServiceWebSites)
 
+WebPage.hasMany(WebPageComponent)
+WebPageComponent.belongsTo(WebPage)
+
 Type.belongsToMany(Brand, {through: TypeBrand})
 Brand.belongsToMany(Type, {through: TypeBrand})
 
@@ -173,6 +182,7 @@ module.exports = {
     ItemInfo,
     ServiceWebSites,
     WebPage,
+    WebPageComponent,
     Order,
     OrderProduct
 }

@@ -12,6 +12,7 @@ export const ITEM_ROUTE = '/item'
 export const EDITOR_ROUTE = '/editor'
 export const MANAGER_ROUTE = '/manager'
 export const USER_PANEL_ROUTE = '/user_panel'
+export const A_TAG=0
 export const P_TAG=0
 export const H1_TAG=1
 export const H2_TAG=2

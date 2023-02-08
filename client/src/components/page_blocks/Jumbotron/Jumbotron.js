@@ -1,6 +1,12 @@
 import React from 'react';
+import {renderCoreComponent} from "../../../utils/components_map";
 
-const Jumbotron = () => {
+const Jumbotron = ({props}) => {
+
+    let result = renderCoreComponent(props[0].id, props[0].component_id, props[0].props)
+
+    return result;
+
     return (
         <div className="container py-4">
             <div className="p-5 mb-4 bg-light rounded-3">

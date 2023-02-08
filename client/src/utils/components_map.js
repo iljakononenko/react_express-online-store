@@ -16,6 +16,12 @@ import FooterBlock from "../components/page_blocks/Footer_block";
 import DivBlock from "../components/core_components/DivBlock";
 import Text from "../components/core_components/Text";
 import * as uuid from "uuid";
+import {default_nodes} from "./default_nodes";
+import Anchor from "../components/core_components/Anchor";
+import Img from "../components/core_components/Img";
+import Button from "../components/core_components/Button";
+import ListBlock from "../components/core_components/ListBlock";
+import ListElement from "../components/core_components/ListElement";
 
 export const basicBlocks = [
     {block_id: 0, block_name: "Header", icon: <FaBars size={36} />},
@@ -33,7 +39,7 @@ export const basicBlocks = [
 ]
 
 export const getBasicBlock = (component_id, key, props) => {
-    switch (component_id){
+    switch (component_id) {
         case 0:
             return <NavBar key={key} props={props} />
         case 1:
@@ -63,24 +69,25 @@ export const getBasicBlock = (component_id, key, props) => {
 }
 
 export const renderCoreComponent = (key, component_id, props) => {
-    // console.log("test")
-    // console.log(key)
-    // console.log(component_id)
-    // console.log(key)
-    // console.log(props)
     switch (component_id){
         case 0:
             return <DivBlock key={key} className={props.className} children={props.children} />
         case 1:
             return <Text key={key} keyProp={key} text={props.text} className={props.className} type={props.type} />
+        case 2:
+            return <Anchor key={key} keyProp={key} text={props.text} className={props.className} type={props.type} url={props.url} />
+        case 3:
+            return <Img key={key} keyProp={key} className={props.className} src={props.src} alt={props.alt} type={props.type} />
+        case 4:
+            return <Button key={key} keyProp={key} className={props.className} text={props.text} type={props.type} />
+        case 5:
+            return <ListBlock key={key} className={props.className} children={props.children} />
+        case 6:
+            return <ListElement key={key} keyProp={key} text={props.text} className={props.className} type={props.type} />
 
     }
 }
 
-export const getDivObject = (className, children) => {
-    return {component_id: 0, key: uuid.v4(), props: {className: className, children: children}}
-}
-
-export const getTextObject = (text, className, type) => {
-    return {component_id: 1, key: uuid.v4(), props: {text: text, className: className, type: type}}
+export const getDefaultNodesForBasicBlocks = (component_id) => {
+    return default_nodes[component_id]
 }

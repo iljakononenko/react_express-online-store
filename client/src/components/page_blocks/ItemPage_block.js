@@ -9,7 +9,7 @@ import {addItemToCart} from "../../http/cartApi";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 
-const ItemPage = observer(() => {
+const ItemPage = observer(({props}) => {
 
     const [item, setItem] = useState({})
     const {id} = useParams()

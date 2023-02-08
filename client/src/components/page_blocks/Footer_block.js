@@ -1,7 +1,7 @@
 import React from 'react';
 import {FaBootstrap, FaFacebook, FaInstagram, FaTwitter} from "react-icons/fa";
 
-const FooterBlock = () => {
+const FooterBlock = ({props}) => {
     return (
         <div className="container mt-auto">
             <footer className="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">

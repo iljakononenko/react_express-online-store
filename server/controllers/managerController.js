@@ -1,4 +1,4 @@
-const {ServiceWebSites, WebPage} = require('../models/models')
+const {ServiceWebSites, WebPage, WebPageComponent} = require('../models/models')
 const ApiError = require('../error/ApiError')
 
 class managerController {
@@ -16,7 +16,11 @@ class managerController {
             const website = await ServiceWebSites.findOne(
                 {
                     where: {subdomain: systemSource},
-                    include: [{model: WebPage, as: "webpages" }]
+                    include: [{model: WebPage, as: "webpages",
+                        include: [{
+                            model: WebPageComponent, as: "webpage_components"
+                        }]
+                    }]
                 }
             )
 

@@ -7,7 +7,7 @@ import Pages from "../Shop/Pages";
 import {Context} from "../../index";
 import {observer} from "mobx-react-lite";
 
-const ProductsBlock = observer(() => {
+const ProductsBlock = observer(({props}) => {
 
     const {item} = useContext(Context)
 

@@ -1,4 +1,4 @@
-const {ServiceWebSites, Brand, Type, ShopItem, Order, OrderProduct, User, UserData, WebPage} = require('../models/models')
+const {ServiceWebSites, Brand, Type, ShopItem, Order, OrderProduct, User, UserData, WebPage, WebPageComponent} = require('../models/models')
 const ApiError = require('../error/ApiError')
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -42,6 +42,8 @@ class AdminController {
 
         // console.log(req.body)
 
+        // return res.send({test: 'test'})
+
         const new_site = await ServiceWebSites.create(
             {
                 name: siteName,
@@ -52,7 +54,19 @@ class AdminController {
         );
 
         for (let page of pages) {
-            await WebPage.create({id: page.id ,name: page.name, url: page.url, components: JSON.stringify(page.components), serviceWebSiteId: new_site.id})
+            let new_page = await WebPage.create({id: page.id ,name: page.name, url: page.url, serviceWebSiteId: new_site.id})
+
+            console.log(new_page.id)
+
+            for (let component of page.components) {
+                await WebPageComponent.create({
+                    key: component.key,
+                    component_id: component.component_id,
+                    component_name: component.component_name,
+                    nodes: JSON.stringify(component.nodes),
+                    webpageId: new_page.id
+                })
+            }
         }
 
         if (Number(layout_type_id) === 2) {
@@ -70,7 +84,10 @@ class AdminController {
             await ShopItem.create({name: "Apple MacBook Pro", price: 12889,brandId: apple_brand.id, typeId: laptop_type.id, img: macbook_img, subdomain: subdomain})
         }
 
-        let new_site_with_pages = await ServiceWebSites.findOne({where: {id: new_site.id}, include: [{model: WebPage, as: "webpages" }]})
+        let new_site_with_pages = await ServiceWebSites.findOne({
+            where: {id: new_site.id},
+            include: [{model: WebPage, as: "webpages", include: [{model: WebPageComponent, as: "webpage_components"}] }]
+        })
 
         return res.send({status: 200, message: "success", editor_id: new_site.id, website: new_site_with_pages});
     }
@@ -78,19 +95,74 @@ class AdminController {
     async updateSite(req, res, next) {
         try {
             const {pages} = req.body;
-            console.log(req.body);
+
             for (let page of pages) {
-                page.components = JSON.stringify(page.components)
 
-                if (page.tag != null && page.tag == "new") {
-                    await WebPage.create({id: page.id ,name: page.name, url: page.url, components: page.components, serviceWebSiteId: page.serviceWebSiteId})
+                if (page.tag === "delete") {
+
+                    await WebPage.destroy({where: {id: page.id}})
+
+                    await WebPageComponent.destroy({where: {webpageId: page.id}})
+
                 } else {
-                    let page_before = WebPage.findOne({where: {id: page.id}})
 
-                    if (!page_before) {
-                        await WebPage.destroy({where: {id: page.id}})
+                    let page_found = await WebPage.findOne({where: {id: page.id}})
+
+                    console.log(page_found)
+
+                    // page not found, we create new
+                    if (!page_found) {
+
+                        let new_page = await WebPage.create({id: page.id ,name: page.name, url: page.url, serviceWebSiteId: page.serviceWebSiteId});
+
+                        for (let component of page.webpage_components) {
+                            await WebPageComponent.create({
+                                key: component.key,
+                                component_id: component.component_id,
+                                component_name: component.component_name,
+                                nodes: JSON.stringify(component.nodes),
+                                webpageId: new_page.id
+                            })
+                        }
+
                     } else {
-                        await WebPage.update({ name: page.name, url: page.url, components: page.components }, {where: {id: page.id}})
+
+                        await WebPage.update({ name: page.name, url: page.url}, {where: {id: page.id}})
+
+                        for (let component of page.webpage_components) {
+
+                            if (component.tag == "delete") {
+
+                                await WebPageComponent.destroy({where: {key: component.key}})
+
+                            } else {
+
+                                let component_found = await WebPageComponent.findOne({where: {key: component.key}})
+
+                                // component not found, so we create one
+                                if (!component_found) {
+
+                                    await WebPageComponent.create({
+                                        key: component.key,
+                                        component_id: component.component_id,
+                                        component_name: component.component_name,
+                                        nodes: JSON.stringify(component.nodes),
+                                        webpageId: page_found.id
+                                    })
+
+                                } else {
+
+                                    await WebPageComponent.update({
+                                        component_id: component.component_id,
+                                        component_name: component.component_name,
+                                        nodes: JSON.stringify(component.nodes),
+                                    }, {where: {key: component.key}})
+
+                                }
+
+                            }
+
+                        }
                     }
                 }
 
@@ -105,7 +177,11 @@ class AdminController {
     }
 
     async getAllWebsites(req, res) {
-        const websites = await ServiceWebSites.findAll({include: [{model: WebPage, as: "webpages" }]})
+        const websites = await ServiceWebSites.findAll({
+            include: [{model: WebPage, as: "webpages",
+                include: [{model: WebPageComponent, as: "webpage_components"}]
+            }]
+        })
 
         return res.send({status: 200, websites: websites});
     }
@@ -115,7 +191,11 @@ class AdminController {
             const {id} = req.params
 
             const website = await ServiceWebSites.findOne(
-                {where: {id}, include: [{model: WebPage, as: "webpages" }]}
+                {
+                    where: {id},
+                    include: [{model: WebPage, as: "webpages",
+                        include: [{model: WebPageComponent, as: "webpage_components"}]
+                    }]}
             )
 
             return res.send(website);

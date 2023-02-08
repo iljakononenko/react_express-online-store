@@ -1,6 +1,13 @@
 import React from 'react';
+import {renderCoreComponent} from "../../../utils/components_map";
 
-const Features = (props) => {
+const Features = ({props}) => {
+
+    console.log(props)
+
+    let result = renderCoreComponent(props[0].id, props[0].component_id, props[0].props)
+
+    return result;
 
     switch (props.variant) {
         // Columns with icons

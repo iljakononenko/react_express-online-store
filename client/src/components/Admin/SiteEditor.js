@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import "../../editor.css"
-import {getBasicBlock, renderCoreComponent, getDivObject, getTextObject} from "../../utils/components_map";
+import {getBasicBlock, getDefaultNodesForBasicBlocks, renderCoreComponent} from "../../utils/components_map";
+import {getDivObject, getTextObject} from "../../utils/elements_utils";
 import {FaAngleLeft, FaPlus, FaRegTrashAlt} from 'react-icons/fa';
 import NavBar_adminEditor from "../NavBars/NavBar_adminEditor";
 import {createSite, editSite, fetchOneSite} from "../../http/adminApi";
 import {AiOutlinePlus} from "react-icons/ai";
 import {useParams} from "react-router-dom";
-import {shop_starting_elements} from "../../utils/starting_elements";
+import {shop_starting_elements, single_page_starting_elements} from "../../utils/starting_elements";
 import AddBlock from "../modals/AddBlock";
 import {Toast} from "react-bootstrap";
 import {H1_TAG, H2_TAG, P_TAG} from "../../utils/consts";
+import {default_nodes} from "../../utils/default_nodes";
 const uuid = require('uuid')
 
 const SiteEditor = () => {
 
-    let test = shop_starting_elements;
+    let test = single_page_starting_elements;
     const {id} = useParams()
 
     const menu_item = {
@@ -59,21 +61,27 @@ const SiteEditor = () => {
     const [isNewSite, setIsNewSite] = useState(false);
 
     useEffect(() => {
-        fetchOneSite(id).then(data => {
-            if ( data != null && data.webpages != null ) {
-                console.log(data.webpages.length)
-                console.log(data.webpages)
-                let obtained_pages = data.webpages
-                for (let page of obtained_pages) {
-                    page.components = JSON.parse(page.components)
+        if (true) {
+            fetchOneSite(id).then(data => {
+                if ( data != null && data.webpages != null ) {
+                    console.log(data.webpages)
+                    let obtained_pages = data.webpages
+                    for (let page of obtained_pages) {
+                        for (let component of page.webpage_components) {
+                            component.nodes = JSON.parse(component.nodes)
+                        }
+                    }
+                    setPages(obtained_pages);
+                    console.log(obtained_pages);
+                } else {
+                    setPages(test);
+                    setIsNewSite(true);
                 }
-                setPages(obtained_pages);
-                console.log(obtained_pages);
-            } else {
-                setPages(test);
-                setIsNewSite(true);
-            }
-        })
+            })
+        } else {
+            setPages(test);
+            setIsNewSite(true);
+        }
     }, [reload])
 
     const [editingPage, setEditingPage] = useState(null);
@@ -114,7 +122,7 @@ const SiteEditor = () => {
     function changeComponentName(name, componentKey) {
         setPages( pages.map( page => {
             if ( page.id === editingPage.id ) {
-                return {...page, components: page.components.map( component => {
+                return {...page, webpage_components: page.webpage_components.map( component => {
                     if (component.key === componentKey) {
                         return {...component, component_name: name}
                     } else {
@@ -127,7 +135,7 @@ const SiteEditor = () => {
         }) )
 
         setEditingPage( prevState => {
-            return {...prevState, components: prevState.components.map( component => {
+            return {...prevState, webpage_components: prevState.webpage_components.map( component => {
                 if (component.key === componentKey) {
                     return {...component, component_name: name};
                 } else {
@@ -138,47 +146,72 @@ const SiteEditor = () => {
     }
 
     function addBlock(component_id) {
-        let new_block = {key: uuid.v4(), component_id: component_id, component_name: "New Block"};
+        let new_block = {key: uuid.v4(), component_id: component_id, component_name: "New Block", nodes: getDefaultNodesForBasicBlocks(component_id), tag: "new"};
         setPages( pages.map( page => {
             if ( page.id === editingPage.id ) {
-                return {...page, components: [...page.components, new_block] }
+                return {...page, webpage_components: [...page.webpage_components, new_block] }
             } else {
                 return page
             }
         }) )
         setEditingPage( prevState => {
-            return {...prevState, components: [...prevState.components, new_block]};
+            return {...prevState, webpage_components: [...prevState.webpage_components, new_block]};
         } )
     }
 
     function addPage() {
-        let new_page = {id: uuid.v4(), name: "New page", url: "/new",components: [{key: uuid.v4(), component_id: 0, component_name: "Header"}], tag: "new", serviceWebSiteId: id};
+        let new_page = {id: uuid.v4(), name: "New page", url: "/new", webpage_components: [{key: uuid.v4(), component_id: 0, component_name: "Header", nodes: default_nodes[0]}], tag: "new", serviceWebSiteId: id};
         setPages( prevState => [...prevState, new_page] )
     }
 
-    function getBlock(component_id, key) {
-        return getBasicBlock(component_id, key);
+    function getBlock(component_id, key, nodes) {
+        return getBasicBlock(component_id, key, nodes);
     }
 
     function removePage(id) {
-        setPages( prevState => prevState.filter(page => page.id !== id ))
+        setPages( prevState => {
+
+            let page_to_remove = prevState.find( page => page.id === id )
+            let newState = prevState.filter(page => page.id !== id )
+
+            if (page_to_remove.tag === "new") {
+                return newState
+            } else {
+                page_to_remove.tag = "delete";
+                return [...newState, page_to_remove]
+            }
+        })
     }
 
     function removeBlock(blockId) {
         setPages( pages.map( page => {
             if ( page.id === editingPage.id ) {
-                return {...page, components: page.components.filter( component => component.key !== blockId ) }
+
+                let component_to_remove = page.webpage_components.find( component => component.key === blockId );
+                let page_components = page.webpage_components.filter( component => component.key !== blockId );
+
+                if (component_to_remove.tag === "new") {
+                    return {...page, webpage_components: page_components }
+                } else {
+                    component_to_remove.tag = "delete"
+                    return {...page, webpage_components: [...page_components, component_to_remove] }
+                }
             } else {
                 return page
             }
         }) )
         setEditingPage( prevState => {
-            return {...prevState, components: prevState.components.filter( component => component.key !== blockId ) };
-        } )
-    }
 
-    function check() {
-        console.log(pages)
+            let component_to_remove = prevState.webpage_components.find( component => component.key === blockId );
+            let page_components = prevState.webpage_components.filter( component => component.key !== blockId );
+
+            if (component_to_remove.tag === "new") {
+                return {...prevState, webpage_components: page_components};
+            } else {
+                component_to_remove.tag = "delete"
+                return {...prevState, webpage_components: [...page_components, component_to_remove] };
+            }
+        } )
     }
 
     function saveChanges() {
@@ -202,61 +235,33 @@ const SiteEditor = () => {
         setReload(prevState => ++prevState)
     }
 
-    useEffect(() => {
-        let test123 = getDivObject("", [
-            getDivObject("position-relative p-3 p-md-5 m-md-3 text-center bg-light", [
-                getDivObject("col-md-5 p-lg-5 mx-auto my-5", [
-                    getTextObject( "Punny headline", "display-4 fw-normal", H1_TAG),
-                    getTextObject( "And an even wittier subheading to boot. Jumpstart your marketing efforts with this example based on Apple’s marketing pages.", "lead fw-normal", P_TAG),
-                    getDivObject("product-device shadow-sm d-none d-md-block", []),
-                    getDivObject("product-device product-device-2 shadow-sm d-none d-md-block", []),
-                ])
-            ]),
-            getDivObject("d-md-flex flex-md-equal w-100 my-md-3 ps-md-3", [
-                getDivObject("text-bg-dark me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                    getDivObject("my-3 py-3", [
-                        getTextObject( "Another headline", "display-5", H2_TAG),
-                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
-                    ]),
-                    getDivObject("bg-light shadow-sm mx-auto block", []),
-                ]),
-                getDivObject("bg-light me-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden flex-md-equal-child", [
-                    getDivObject("my-3 py-3", [
-                        getTextObject( "Another headline", "display-5", H2_TAG),
-                        getTextObject( "And an even wittier subheading.", "lead", P_TAG),
-                    ]),
-                    getDivObject("bg-light shadow-sm mx-auto block", []),
-                ]),
-            ]),
-        ])
-        let test333 = renderCoreComponent(test123.key, test123.component_id, test123.props );
-        setTest2(test123)
-        setCoreComponent(test333)
-    }, [])
-
-    // let test3 = JSON.stringify(test2)
-    // console.log(test3)
-    // test3 = test3.replaceAll('Apple', "Samsung")
-    // test2 = JSON.parse(test3)
-
     const editElementText = (e) => {
+
         setEditingElement(prevState => {
-            // console.log(prevState.id)
-            // console.log(test2)
-            let test4 = JSON.stringify(test2)
-            // console.log(test4)
+
+            let components_stringified = JSON.stringify(editingPage)
+
             let regex = new RegExp(`"${prevState.id}","props":{"text":"(?:[^"\\\\]|\\\\.)*"`, "g")
-            // console.log(regex)
-            // console.log(regex.test(test4))
             let text = e.target.value
-            // console.log(text)
             text = text.replaceAll('\\','\\\\')
             text = text.replaceAll('"','\\"')
 
-            test4 = test4.replaceAll(regex, `"${prevState.id}","props":{"text":"${text}"`)
-            setTest2(JSON.parse(test4))
-            let final_object = JSON.parse(test4);
-            setCoreComponent(renderCoreComponent(final_object.key, final_object.component_id, final_object.props))
+            components_stringified = components_stringified.replaceAll(regex, `"${prevState.id}","props":{"text":"${text}"`)
+
+            let page_updated = JSON.parse(components_stringified)
+
+            setEditingPage(page_updated)
+            setPages( pages.map( page => {
+                if ( page.id === editingPage.id ) {
+                    return page_updated
+                } else {
+                    return page
+                }
+            }) )
+
+            // let final_object = JSON.parse(components_stringified);
+            // setCoreComponent(renderCoreComponent(final_object.key, final_object.component_id, final_object.props))
+
             return {...prevState, text: e.target.value}
         })
     }
@@ -265,7 +270,7 @@ const SiteEditor = () => {
         <>
             <AddBlock show={newBlockModalOpen} onHide={closeNewBlockModal} submitBlock={submitBlock} />
             <NavBar_adminEditor saveChanges={saveChanges} resetChanges={resetChanges} />
-            <div style={true ? {display: "flex", justifyContent: "end", flex: "1"} : {}} >
+            <div style={{display: "flex", justifyContent: "end", flex: "1"}} >
                 <div style={{ background: "#2e383e", padding: "10px 20px", minWidth: "300px" }}>
                     <div className="btn-group" style={{ display: "block", padding: "10px 0", textAlign: "center", marginBottom: "10px" }}>
                         <button type="button" className="btn btn-warning no-radius d-inline-flex align-items-center" onClick={
@@ -277,19 +282,22 @@ const SiteEditor = () => {
                     {
                         isEditingPage ?
                             <div>
-                                { pages.map(({id, name, component}) =>
-                                    <div key={id} style={menu_item} onClick={() => editPage(id) } >
-                                        <input style={{ background: "#374143", border: "1px solid #374143", color: "#fff" }}
-                                               type="text" value={name}
-                                               onChange={ e => changePageName(e.target.value, id) }
-                                               onClick={ e => {e.stopPropagation()} }
-                                        />
-                                        <span style={{ padding: "4px" }}
-                                            onClick={e => {e.stopPropagation(); removePage(id) } }
-                                        >
-                                            <FaRegTrashAlt style={{ display: "block" }} />
-                                        </span>
-                                    </div>
+                                { pages.map(({id, name, component, tag}) =>
+                                    tag != null && tag === "delete" ?
+                                        ""
+                                        :
+                                        <div key={id} style={menu_item} onClick={() => editPage(id) } >
+                                            <input style={{ background: "#374143", border: "1px solid #374143", color: "#fff" }}
+                                                   type="text" value={name}
+                                                   onChange={ e => changePageName(e.target.value, id) }
+                                                   onClick={ e => {e.stopPropagation()} }
+                                            />
+                                            <span style={{ padding: "4px" }}
+                                                      onClick={e => {e.stopPropagation(); removePage(id) } }
+                                                >
+                                                <FaRegTrashAlt style={{ display: "block" }} />
+                                            </span>
+                                        </div>
                                 )}
                             </div>
                             :
@@ -305,19 +313,22 @@ const SiteEditor = () => {
                                            onClick={ e => {e.stopPropagation()} }
                                     />
                                 </div>
-                                { editingPage.components.map(({key, component_id, component_name}) =>
-                                    <div key={key} style={menu_item} >
-                                        <input style={{ background: "#374143", border: "1px solid #374143", color: "#fff" }}
-                                               type="text" value={component_name}
-                                               onChange={ e => changeComponentName(e.target.value, key) }
-                                               onClick={ e => {e.stopPropagation()} }
-                                        />
-                                        <span style={{ padding: "4px" }}
-                                            onClick={e => { e.stopPropagation(); removeBlock(key) } }
-                                        >
-                                            <FaRegTrashAlt style={{ display: "block" }} />
-                                        </span>
-                                    </div>
+                                { editingPage.webpage_components.map(({key, component_id, component_name, tag}) =>
+                                    tag != null && tag === "delete" ?
+                                        ""
+                                        :
+                                        <div key={key} style={menu_item} >
+                                            <input style={{ background: "#374143", border: "1px solid #374143", color: "#fff" }}
+                                                   type="text" value={component_name}
+                                                   onChange={ e => changeComponentName(e.target.value, key) }
+                                                   onClick={ e => {e.stopPropagation()} }
+                                            />
+                                            <span style={{ padding: "4px" }}
+                                                  onClick={e => { e.stopPropagation(); removeBlock(key) } }
+                                                >
+                                                <FaRegTrashAlt style={{ display: "block" }} />
+                                            </span>
+                                        </div>
                                 )}
                                 {
                                     editingTextSelected ?
@@ -336,6 +347,7 @@ const SiteEditor = () => {
                 </div>
                 <div style={true ? {width: "100%", padding: "16px 30px"} : {}}>
                     <div style={true ? {overflowX: "hidden", overflowY: "auto", maxHeight: "90vh" } : {}}>
+
                         <div className={'editing-window'} onClick={(e) => {
                                 if (e.target.dataset.id != null) {
                                     setEditingTextSelected(true)
@@ -343,15 +355,23 @@ const SiteEditor = () => {
                                 }
                             }}
                         >
+
+{/* ------------------------------------------------------------- RENDERING BLOCKS ------------------------------------------------------------- */}
+
                             {/*{ Object.keys(coreComponent).length !== 0 ? coreComponent : "test" }*/}
                             {
-                                isEditingPage && true ?
+                                isEditingPage ?
                                     <h1>Select page to edit</h1>
                                     :
-                                    editingPage.components.map(({component_id, key}) =>
-                                        getBlock(component_id, key)
+                                    editingPage.webpage_components.map(({component_id, key, nodes, tag}) =>
+                                        tag != null && tag === "delete" ?
+                                            ""
+                                        :
+                                            getBlock(component_id, key, nodes)
+
                                     )
                             }
+
                         </div>
                     </div>
                 </div>
