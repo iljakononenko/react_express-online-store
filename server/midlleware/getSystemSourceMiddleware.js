@@ -4,10 +4,15 @@ module.exports = function (req, res, next) {
         next()
     }
 
-    let host = req.get('origin');
-    host = "http://test4.prodsell.pl"
+    let origin = req.get('origin');
     const regex = /:\/\/(\w+)\.prodsell\.pl/g;
-    const found = regex.exec(host);
+
+    let found;
+    if (origin.includes('localhost')) {
+        found = ["", 'localhost']
+    } else {
+        found = regex.exec(origin)
+    }
 
     if (found != null && found[1] != null) {
         console.log('Subdomain request')
@@ -16,7 +21,7 @@ module.exports = function (req, res, next) {
         next()
     } else {
         console.log('Main request')
-        console.log(host)
+        console.log(origin)
         return next(ApiError.notFound("Subdomain not found"))
     }
 

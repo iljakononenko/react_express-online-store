@@ -23,6 +23,7 @@ const CreateSite = observer(({show, onHide}) => {
     ];
 
     const addSite = async () => {
+        // add checking by already existing sites and subdomains
         let flag = true;
         if (Object.keys(siteVariant).length === 0 || siteName === "") {
             flag = false;
@@ -31,6 +32,10 @@ const CreateSite = observer(({show, onHide}) => {
         if (/[^a-zA-Z0-9 ]/.test(siteName)) {
             flag = false;
             alert("Site name should consist only of numbers and letters!")
+        }
+        if (siteName === "localhost") {
+            flag = false;
+            alert("Please name site differently!")
         }
         if (flag) {
             createSite( siteName, siteVariant.pages, siteVariant.id).then( async data => {

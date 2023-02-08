@@ -33,3 +33,7 @@ input[type=number] {
     flex: 1;
 }
 
+.admin-editing {
+    box-shadow: rgb(255 213 3) 0px 0px 15px 5px;
+}
+

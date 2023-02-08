@@ -91,6 +91,7 @@ const WebPageComponent = sequelize.define('webpage_component', {
     key: {type: DataTypes.STRING, primaryKey: true},
     component_id: {type: DataTypes.INTEGER},
     component_name: {type: DataTypes.STRING},
+    order: {type: DataTypes.INTEGER},
     nodes: {type: DataTypes.TEXT}
 })
 

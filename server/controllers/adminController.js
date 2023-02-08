@@ -17,6 +17,21 @@ const generateJwt = (id, email, role) => {
 
 class AdminController {
 
+    async isBaseInit(req, res, next) {
+        const existing_system = await ServiceWebSites.findOne({where: {id: 1}});
+
+        res.send({isInit: existing_system != null})
+    }
+
+    async initBase(req, res, next) {
+        const existing_system = await ServiceWebSites.findOne({where: {id: 1}});
+
+        if (!existing_system) {
+            // console.log(this)
+            await (new AdminController).createSite(req, res)
+        }
+    }
+
     async login(req, res, next) {
         const {email, password} = req.body;
         const user = await User.findOne({where: {email}})
@@ -58,11 +73,12 @@ class AdminController {
 
             console.log(new_page.id)
 
-            for (let component of page.components) {
+            for (let component of page.webpage_components) {
                 await WebPageComponent.create({
                     key: component.key,
                     component_id: component.component_id,
                     component_name: component.component_name,
+                    order: component.order,
                     nodes: JSON.stringify(component.nodes),
                     webpageId: new_page.id
                 })
@@ -120,6 +136,7 @@ class AdminController {
                                 key: component.key,
                                 component_id: component.component_id,
                                 component_name: component.component_name,
+                                order: component.order,
                                 nodes: JSON.stringify(component.nodes),
                                 webpageId: new_page.id
                             })
@@ -146,6 +163,7 @@ class AdminController {
                                         key: component.key,
                                         component_id: component.component_id,
                                         component_name: component.component_name,
+                                        order: component.order,
                                         nodes: JSON.stringify(component.nodes),
                                         webpageId: page_found.id
                                     })
@@ -155,6 +173,7 @@ class AdminController {
                                     await WebPageComponent.update({
                                         component_id: component.component_id,
                                         component_name: component.component_name,
+                                        order: component.order,
                                         nodes: JSON.stringify(component.nodes),
                                     }, {where: {key: component.key}})
 

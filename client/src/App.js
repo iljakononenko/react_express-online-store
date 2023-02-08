@@ -8,11 +8,18 @@ import {check, checkAdmin} from "./http/userApi";
 import {Spinner} from "react-bootstrap";
 import "./App.css";
 import {fetchBrands, fetchItems, fetchTypes} from "./http/itemApi";
+import {initBase} from "./http/adminApi";
 
 const App = observer(() => {
 
     const {item, user, admin} = useContext(Context)
     const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        initBase().then(() => {
+            console.log('test')
+        })
+    })
 
     useEffect(() => {
         fetchTypes().then(data => item.setTypes(data))
@@ -33,6 +40,8 @@ const App = observer(() => {
     useEffect(() => {
         if (localStorage.getItem('admin_token') != null) {
             checkAdmin().then(data => {
+                console.log("data")
+                console.log(data)
                 if (data != null) {
                     admin.setAdmin(data)
                     admin.setIsAuth(true)

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import "../../editor.css"
 import {getBasicBlock, getDefaultNodesForBasicBlocks, renderCoreComponent} from "../../utils/components_map";
 import {getDivObject, getTextObject} from "../../utils/elements_utils";
-import {FaAngleLeft, FaPlus, FaRegTrashAlt} from 'react-icons/fa';
+import {FaAlignCenter, FaAlignLeft, FaAlignRight, FaAngleLeft, FaPlus, FaRegTrashAlt} from 'react-icons/fa';
 import NavBar_adminEditor from "../NavBars/NavBar_adminEditor";
 import {createSite, editSite, fetchOneSite} from "../../http/adminApi";
 import {AiOutlinePlus} from "react-icons/ai";
@@ -32,16 +32,15 @@ const SiteEditor = () => {
         alignItems: "center"
     };
 
+    const textarea_style = { background: "#374143", border: "1px solid #374143", color: "#fff", width: "100%" }
+
     const [reload, setReload] = useState(0);
 
     const [newBlockModalOpen, setNewBlockModalOpen] = useState(false);
     const [operationSuccessToast, setOperationSuccessToast] = useState(false);
+    const [previousEditingElement, setPreviousEditingElement] = useState({});
     const [editingElement, setEditingElement] = useState({});
-    const [editingElementText, setEditingElementText] = useState("");
     const [editingTextSelected, setEditingTextSelected] = useState(false)
-
-    const [test2, setTest2] = useState({})
-    const [coreComponent, setCoreComponent] = useState(<></>)
 
     const openNewBlockModal = () => {
         setNewBlockModalOpen(true)
@@ -70,6 +69,9 @@ const SiteEditor = () => {
                         for (let component of page.webpage_components) {
                             component.nodes = JSON.parse(component.nodes)
                         }
+                        page.webpage_components = page.webpage_components.sort(function(a, b) {
+                            return a.order - b.order;
+                        })
                     }
                     setPages(obtained_pages);
                     console.log(obtained_pages);
@@ -146,7 +148,7 @@ const SiteEditor = () => {
     }
 
     function addBlock(component_id) {
-        let new_block = {key: uuid.v4(), component_id: component_id, component_name: "New Block", nodes: getDefaultNodesForBasicBlocks(component_id), tag: "new"};
+        let new_block = {key: uuid.v4(), component_id: component_id, component_name: "New Block", order: editingPage.webpage_components.length + 1, nodes: getDefaultNodesForBasicBlocks(component_id), tag: "new"};
         setPages( pages.map( page => {
             if ( page.id === editingPage.id ) {
                 return {...page, webpage_components: [...page.webpage_components, new_block] }
@@ -160,7 +162,7 @@ const SiteEditor = () => {
     }
 
     function addPage() {
-        let new_page = {id: uuid.v4(), name: "New page", url: "/new", webpage_components: [{key: uuid.v4(), component_id: 0, component_name: "Header", nodes: default_nodes[0]}], tag: "new", serviceWebSiteId: id};
+        let new_page = {id: uuid.v4(), name: "New page", url: "/new", webpage_components: [{key: uuid.v4(), component_id: 0, component_name: "Header", order: 1, nodes: default_nodes[0]}], tag: "new", serviceWebSiteId: id};
         setPages( prevState => [...prevState, new_page] )
     }
 
@@ -266,6 +268,50 @@ const SiteEditor = () => {
         })
     }
 
+    const editElementClassNames = (classNameAdded) => {
+
+        let list_of_text_alignment_classes = [
+            "text-start",
+            "text-center",
+            "text-end"
+        ]
+
+        let components_stringified = JSON.stringify(editingPage)
+
+        console.log(components_stringified)
+
+        let regex = new RegExp(`"${editingElement.id}","props":{("\\w+":"(?:[^"\\\\]|\\\\.)*")*,"className":"([a-zA-Z0-9- ]*)"`, "g")
+        // let text = e.target.value
+        console.log(regex)
+        let regex_result = regex.exec(components_stringified);
+        console.log(regex_result)
+        let previousClasses = regex_result["2"]
+        let newClassNames;
+
+        console.log(previousClasses)
+        for (let className of list_of_text_alignment_classes) {
+            previousClasses = previousClasses.replaceAll(className, "");
+        }
+
+        newClassNames = previousClasses + " " + classNameAdded
+
+        components_stringified = components_stringified.replaceAll(regex, `"${editingElement.id}","props":{$1,"className":"${newClassNames}"`)
+
+        console.log(components_stringified)
+
+        let page_updated = JSON.parse(components_stringified)
+
+        setEditingPage(page_updated)
+        setPages( pages.map( page => {
+            if ( page.id === editingPage.id ) {
+                return page_updated
+            } else {
+                return page
+            }
+        }) )
+
+    }
+
     return (
         <>
             <AddBlock show={newBlockModalOpen} onHide={closeNewBlockModal} submitBlock={submitBlock} />
@@ -332,13 +378,37 @@ const SiteEditor = () => {
                                 )}
                                 {
                                     editingTextSelected ?
-                                        <div style={menu_item} >
-                                            <input style={{ background: "#374143", border: "1px solid #374143", color: "#fff" }}
-                                                   type="text" value={editingElement.text}
-                                                   onChange={ e => editElementText(e)  }
-                                                   onClick={ e => {e.stopPropagation()} }
-                                            />
-                                        </div>
+                                        <>
+                                            <p className={'text-white'}>Text:</p>
+                                            <div style={menu_item} >
+                                                <textarea className={'form-control'}
+                                                          style={ editingElement.text.length > 40 ? {...textarea_style, height: "250px"} :textarea_style }
+                                                        value={editingElement.text}
+                                                       onChange={ e => editElementText(e)  }
+                                                       onClick={ e => {e.stopPropagation()} }
+                                                />
+                                            </div>
+                                            <div>
+                                                <p className={'text-white'}>Align content:</p>
+                                                <div className={'d-flex justify-content-around'}>
+                                                    <FaAlignLeft
+                                                        className={'cursor-pointer'}
+                                                        style={{ width: "40px", height: "40px", color: "white" }}
+                                                        onClick={() => editElementClassNames("text-start")}
+                                                    />
+                                                    <FaAlignCenter
+                                                        className={'cursor-pointer'}
+                                                        style={{ width: "40px", height: "40px", color: "white" }}
+                                                        onClick={() => editElementClassNames("text-center")}
+                                                    />
+                                                    <FaAlignRight
+                                                        className={'cursor-pointer'}
+                                                        style={{ width: "40px", height: "40px", color: "white" }}
+                                                        onClick={() => editElementClassNames("text-end")}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </>
                                         :
                                         ""
                                 }
@@ -350,8 +420,17 @@ const SiteEditor = () => {
 
                         <div className={'editing-window'} onClick={(e) => {
                                 if (e.target.dataset.id != null) {
+                                    console.log("previousEditingElement")
+                                    console.log(previousEditingElement)
+
+                                    if (Object.keys(previousEditingElement).length != 0) {
+                                        previousEditingElement.target.className = previousEditingElement.target.className.replace('admin-editing', "")
+                                    }
+
                                     setEditingTextSelected(true)
                                     setEditingElement({id: e.target.dataset.id, text: e.target.innerText})
+                                    setPreviousEditingElement(e)
+                                    e.target.className += " admin-editing";
                                 }
                             }}
                         >

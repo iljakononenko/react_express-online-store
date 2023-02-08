@@ -27,6 +27,9 @@ const AppRouter = () => {
                     for (let component of page.webpage_components) {
                         component.nodes = JSON.parse(component.nodes)
                     }
+                    page.webpage_components = page.webpage_components.sort(function(a, b) {
+                        return a.order - b.order;
+                    })
                 }
                 console.log(obtained_pages)
                 admin.setCurrentPages(obtained_pages)
@@ -43,6 +46,9 @@ const AppRouter = () => {
     function getBlock(component_id, key, nodes) {
         return getBasicBlock(component_id, key, nodes);
     }
+
+    console.log("admin isAuth")
+    console.log(admin.admin)
 
     return (
         <Switch>

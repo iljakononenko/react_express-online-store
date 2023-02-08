@@ -15,6 +15,10 @@ const AuthAdmin = () => {
 
     const location = useLocation();
 
+    if (admin.isAuth) {
+        window.location.pathname = "/admin/home"
+    }
+
     const click = async () => {
         try {
             let data;

@@ -4,6 +4,8 @@ const adminController = require('../controllers/adminController')
 const checkRole = require("../midlleware/checkRoleMiddleware");
 const getSystemSourceMiddleware = require("../midlleware/getSystemSourceMiddleware");
 
+router.get('/isBaseInit', adminController.isBaseInit)
+router.post('/initBase', adminController.initBase)
 router.post('/login', adminController.login)
 router.post('/create', checkRole, adminController.createSite)
 router.post('/', checkRole, adminController.updateSite)

@@ -1,5 +1,14 @@
 import {$adminHost, $authHost, $host} from "./index";
 import jwt_decode from "jwt-decode";
+import {shop_starting_elements} from "../utils/starting_elements";
+
+export const initBase = async () => {
+    const {data} = await $host.get('/api/admin/isBaseInit')
+    if (!data.isInit) {
+        const {data} = await $host.post('/api/admin/initBase', {siteName: "localhost", pages: shop_starting_elements, layout_type_id: 2})
+    }
+    return data;
+}
 
 export const createSite = async (siteName, pages, layout_type_id) => {
     const {data} = await $adminHost.post('api/admin/create', {siteName: siteName, pages: pages, layout_type_id: layout_type_id})
