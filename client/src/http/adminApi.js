@@ -20,6 +20,16 @@ export const editSite = async (id, pages) => {
     return data;
 }
 
+export const submitNewFile = async (img) => {
+    const {data} = await $adminHost.post('api/admin/addImage', img)
+    return data;
+}
+
+export const getGalleryFiles = async () => {
+    const {data} = await $adminHost.get('api/admin/galleryCount')
+    return data
+}
+
 export const fetchWebSites = async () => {
     try {
         const {data} = await $adminHost.get('api/admin/')

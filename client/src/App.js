@@ -17,7 +17,7 @@ const App = observer(() => {
 
     useEffect(() => {
         initBase().then(() => {
-            console.log('test')
+            // console.log('test')
         })
     })
 

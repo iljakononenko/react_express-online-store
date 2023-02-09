@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {Context} from "../../index";
 import {NavLink, useHistory, useLocation} from "react-router-dom";
 import {
@@ -20,6 +20,7 @@ const NavBar = observer(( {props} ) => {
     const {user} = useContext(Context)
     const history = useHistory()
 
+    const [isAuthUser, setIsAuthUser] = useState(false);
     const location = useLocation();
     const isRealPage = !location.pathname.includes(EDITOR_ROUTE);
 
@@ -37,8 +38,8 @@ const NavBar = observer(( {props} ) => {
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
-                <NavLink style={{color: "white", textDecoration: "none"}} data-id={props[0].id} to={ isRealPage ? SHOP_ROUTE : "#"}>{props[0] != null ? props[0].props.text : "ProdSell"}</NavLink>
-                {user.isAuth ?
+                <NavLink style={{color: "white", textDecoration: "none"}} data-custom-type={"text"} data-id={props[0].id} to={ isRealPage ? SHOP_ROUTE : "#"}>{props[0] != null ? props[0].props.text : "ProdSell"}</NavLink>
+                {(isRealPage && user.isAuth) || isAuthUser ?
                     <div className={'d-flex align-items-center'}>
                         <p className={'mb-0 text-white me-2'}>Hello!</p>
                         <Navbar.Toggle className={"ms-auto"} style={{color: "white"}} aria-controls="navbar-dark-example"/>
@@ -64,7 +65,7 @@ const NavBar = observer(( {props} ) => {
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item
                                         className={'d-flex align-items-center justify-content-between'}
-                                        onClick={() => logOut()}>
+                                        onClick={isRealPage ? () => logOut() : () => setIsAuthUser(false) }>
                                         Log out
                                         <FaDoorOpen />
                                     </NavDropdown.Item>
@@ -74,7 +75,7 @@ const NavBar = observer(( {props} ) => {
                     </div>
                     :
                     <Nav className="ms-auto" style={{color: "white"}}>
-                        <Button variant={"outline-light"} className="ms-2" onClick={ isRealPage ? () => history.push(LOGIN_ROUTE) : null }>Authorization</Button>
+                        <Button variant={"outline-light"} className="ms-2" onClick={ isRealPage ? () => history.push(LOGIN_ROUTE) : () => {setIsAuthUser(true)} }>Authorization</Button>
                     </Nav>
                 }
             </Container>

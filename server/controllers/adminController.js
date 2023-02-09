@@ -2,6 +2,8 @@ const {ServiceWebSites, Brand, Type, ShopItem, Order, OrderProduct, User, UserDa
 const ApiError = require('../error/ApiError')
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs");
 const lenovo_img = 'lenovo.jpg'
 const lenovo_phone_img = 'lenovo-legion-y70.jpg'
 const iphone_img = 'iphone.jpg'
@@ -21,6 +23,12 @@ class AdminController {
         const existing_system = await ServiceWebSites.findOne({where: {id: 1}});
 
         res.send({isInit: existing_system != null})
+    }
+
+    async getGalleryCount(req, res, next) {
+        let files = fs.readdirSync(path.resolve(__dirname, "..", "static", "gallery"))
+
+        res.send({status: 200, message: "success", files: files})
     }
 
     async initBase(req, res, next) {
@@ -150,7 +158,13 @@ class AdminController {
 
                             if (component.tag == "delete") {
 
+                                console.log(component)
+
+                                console.log('here')
+
                                 await WebPageComponent.destroy({where: {key: component.key}})
+
+                                console.log('after error')
 
                             } else {
 
@@ -300,6 +314,18 @@ class AdminController {
             console.log(err)
             return next(ApiError.badRequest("error"))
         }
+    }
+
+    async addImage(req, res, next) {
+        const {img} = req.files;
+
+        // console.log(img)
+
+        await img.mv(path.resolve(__dirname, "..", "static", "gallery", img.name))
+
+        let files = fs.readdirSync(path.resolve(__dirname, "..", "static", "gallery"))
+
+        res.send({status: 200, message: "success", files: files})
     }
 
 

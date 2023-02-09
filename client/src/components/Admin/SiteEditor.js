@@ -9,22 +9,40 @@ import {
 import {getDivObject, getTextObject} from "../../utils/elements_utils";
 import {FaAlignCenter, FaAlignLeft, FaAlignRight, FaAngleLeft, FaPlus, FaRegTrashAlt} from 'react-icons/fa';
 import NavBar_adminEditor from "../NavBars/NavBar_adminEditor";
-import {createSite, editSite, fetchOneSite} from "../../http/adminApi";
+import {createSite, editSite, fetchOneSite, getGalleryFiles, submitNewFile} from "../../http/adminApi";
 import {AiOutlinePlus} from "react-icons/ai";
 import {useParams} from "react-router-dom";
 import {shop_starting_elements, single_page_starting_elements} from "../../utils/starting_elements";
 import AddBlock from "../modals/AddBlock";
-import {Toast} from "react-bootstrap";
-import {H1_TAG, H2_TAG, P_TAG} from "../../utils/consts";
-import {default_nodes} from "../../utils/default_nodes";
+import {DropdownButton, Dropdown, Toast, Badge} from "react-bootstrap";
+import GalleryModal from "../modals/GalleryModal";
 const uuid = require('uuid')
 
 const SiteEditor = () => {
 
-    let header;
-    let footer;
+    const [header, setHeader] = useState({})
+    const [footer, setFooter] = useState({})
     let test = single_page_starting_elements;
     const {id} = useParams()
+    const [file, setFile] = useState(null)
+
+    let list_of_text_alignment_classes = [
+        "text-start",
+        "text-center",
+        "text-end"
+    ]
+
+    let list_of_colors = [
+        'default',
+        'primary',
+        'secondary',
+        'success',
+        'danger',
+        'warning',
+        'info',
+        'light',
+        'dark',
+    ]
 
     const menu_item = {
         minWidth: "261px",
@@ -41,6 +59,53 @@ const SiteEditor = () => {
 
     const textarea_style = { background: "#374143", border: "1px solid #374143", color: "#fff", width: "100%" }
 
+    const chooseImgFromGallery = (img_name) => {
+        if (img_name != null && img_name !== "") {
+
+            if (editingImgSelected) {
+                let components_stringified = JSON.stringify(editingPage)
+
+                // console.log(components_stringified)
+
+                let regex = new RegExp(`"${editingElement.id}","props":{("\\w+":"(?:[^"\\\\]|\\\\.)*",)*"src":"(?:[^"\\\\]|\\\\.)*"`, "g")
+                // console.log(regex)
+                let new_src = process.env.REACT_APP_URL_API + "/gallery/" + img_name
+
+                components_stringified = components_stringified.replaceAll(regex, `"${editingElement.id}","props":{$1"src":"${new_src}"`)
+
+                // console.log(components_stringified)
+
+                let page_updated = JSON.parse(components_stringified)
+
+                setEditingPage(page_updated)
+                setPages( pages.map( page => {
+                    if ( page.id === editingPage.id ) {
+                        return page_updated
+                    } else {
+                        return page
+                    }
+                }) )
+            }
+
+        }
+        closeGalleryModal()
+    }
+
+    const selectFile = e => {
+        setFile(e.target.files[0])
+    }
+
+    const submitFile = () => {
+        const formData = new FormData();
+        formData.append('img', file)
+        submitNewFile(formData).then(data => {
+            setFile(null)
+            setGalleryFiles(data.files)
+            setOperationSuccessToast(true)
+        })
+        // send file and get response
+    }
+
     const [reload, setReload] = useState(0);
 
     const [newBlockModalOpen, setNewBlockModalOpen] = useState(false);
@@ -48,6 +113,50 @@ const SiteEditor = () => {
     const [previousEditingElement, setPreviousEditingElement] = useState({});
     const [editingElement, setEditingElement] = useState({});
     const [editingTextSelected, setEditingTextSelected] = useState(false)
+    const [editingImgSelected, setEditingImgSelected] = useState(false)
+    const [editingBlockSelected, setEditingBlockSelected] = useState(false)
+    const [galleryModalOpen, setGalleryModalOpen] = useState(false)
+    const [galleryFiles, setGalleryFiles] = useState([])
+
+    const editingElementGetTextColor = () => {
+        for (let color of list_of_colors) {
+            if (editingElementHasClassName("text-" + color)) {
+                return color
+            }
+        }
+        return "default"
+    }
+
+    const editingElementGetBackgrounColor = () => {
+        for (let color of list_of_colors) {
+            if (editingElementHasClassName("bg-" + color)) {
+                return color
+            }
+        }
+        return "default"
+    }
+
+    const editingElementHasClassName = (className) => {
+        return editingElement.className.includes(className);
+    }
+
+    const editTextColorToEditingElement = (color) => {
+        let array = [];
+        for (let color of list_of_colors) {
+            array.push("text-" + color)
+        }
+        let className = color === "default" ? "" : "text-" + color;
+        editElementClassNames(array, className)
+    }
+
+    const editBackgroundColorToEditingElement = (color) => {
+        let array = [];
+        for (let color of list_of_colors) {
+            array.push("bg-" + color)
+        }
+        let className = color === "default" ? "" : "bg-" + color;
+        editElementClassNames(array, className)
+    }
 
     const openNewBlockModal = () => {
         setNewBlockModalOpen(true)
@@ -55,6 +164,14 @@ const SiteEditor = () => {
 
     const closeNewBlockModal = () => {
         setNewBlockModalOpen(false)
+    }
+
+    const openGalleryModal = () => {
+        setGalleryModalOpen(true)
+    }
+
+    const closeGalleryModal = () => {
+        setGalleryModalOpen(false)
     }
 
     const submitBlock = (block_id) => {
@@ -68,6 +185,12 @@ const SiteEditor = () => {
 
     useEffect(() => {
 
+        // console.log('Loading data')
+
+        getGalleryFiles().then(data => {
+            setGalleryFiles(data.files)
+        })
+
         fetchOneSite(id).then(data => {
             if ( data != null && data.webpages != null ) {
 
@@ -75,10 +198,13 @@ const SiteEditor = () => {
 
                 // extracting header and footer from website obtained
                 let page_template = obtained_pages.find(page => page.url === "0");
-                header = page_template.webpage_components.find(component => component.component_id === 0);
-                footer = page_template.webpage_components.find(component => component.component_id === 11);
-                header.nodes = JSON.parse(header.nodes)
-                footer.nodes = JSON.parse(footer.nodes)
+                let header1 = page_template.webpage_components.find(component => component.component_id === 0);
+                let footer1 = page_template.webpage_components.find(component => component.component_id === 11);
+                header1.nodes = JSON.parse(header1.nodes)
+                footer1.nodes = JSON.parse(footer1.nodes)
+
+                setHeader(header1)
+                setFooter(footer1)
 
                 for (let page of obtained_pages) {
 
@@ -88,8 +214,8 @@ const SiteEditor = () => {
                         }
                         page.webpage_components = sortComponents(page.webpage_components)
 
-                        page.webpage_components.unshift(header)
-                        page.webpage_components.push(footer)
+                        page.webpage_components.unshift(header1)
+                        page.webpage_components.push(footer1)
                     }
 
                 }
@@ -118,6 +244,8 @@ const SiteEditor = () => {
 
     function backToPages() {
         setEditingTextSelected(false)
+        setEditingImgSelected(false)
+        setEditingBlockSelected(false)
         setEditingElement({})
         setIsEditingPage(true);
         setEditingPage(null);
@@ -276,6 +404,7 @@ const SiteEditor = () => {
     }
 
     function resetChanges() {
+        backToPages()
         setReload(prevState => ++prevState)
     }
 
@@ -316,19 +445,13 @@ const SiteEditor = () => {
         })
     }
 
-    const editElementClassNames = (classNameAdded) => {
-
-        let list_of_text_alignment_classes = [
-            "text-start",
-            "text-center",
-            "text-end"
-        ]
+    const editElementClassNames = (list_of_classes, classNameAdded) => {
 
         let components_stringified = JSON.stringify(editingPage)
 
         console.log(components_stringified)
 
-        let regex = new RegExp(`"${editingElement.id}","props":{("\\w+":"(?:[^"\\\\]|\\\\.)*")*,"className":"([a-zA-Z0-9- ]*)"`, "g")
+        let regex = new RegExp(`"${editingElement.id}","props":{("\\w+":"(?:[^"\\\\]|\\\\.)*",)*"className":"([a-zA-Z0-9- ]*)"`, "g")
         // let text = e.target.value
         console.log(regex)
         let regex_result = regex.exec(components_stringified);
@@ -337,13 +460,13 @@ const SiteEditor = () => {
         let newClassNames;
 
         console.log(previousClasses)
-        for (let className of list_of_text_alignment_classes) {
+        for (let className of list_of_classes) {
             previousClasses = previousClasses.replaceAll(className, "");
         }
 
         newClassNames = previousClasses + " " + classNameAdded
 
-        components_stringified = components_stringified.replaceAll(regex, `"${editingElement.id}","props":{$1,"className":"${newClassNames}"`)
+        components_stringified = components_stringified.replaceAll(regex, `"${editingElement.id}","props":{$1"className":"${newClassNames}"`)
 
         console.log(components_stringified)
 
@@ -360,9 +483,16 @@ const SiteEditor = () => {
 
     }
 
+    const editTextColor = (text_color) => {
+
+
+
+    }
+
     return (
         <>
             <AddBlock show={newBlockModalOpen} onHide={closeNewBlockModal} submitBlock={submitBlock} />
+            <GalleryModal show={galleryModalOpen} onHide={closeGalleryModal} images={galleryFiles} submitImage={chooseImgFromGallery} />
             <NavBar_adminEditor saveChanges={saveChanges} resetChanges={resetChanges} />
             <div style={{display: "flex", justifyContent: "end", flex: "1"}} >
                 <div style={{ background: "#2e383e", padding: "10px 20px", minWidth: "300px" }}>
@@ -427,7 +557,7 @@ const SiteEditor = () => {
                                         </div>
                                 )}
                                 {
-                                    editingTextSelected ?
+                                    editingTextSelected &&
                                         <>
                                             <p className={'text-white'}>Text:</p>
                                             <div style={menu_item} >
@@ -438,29 +568,126 @@ const SiteEditor = () => {
                                                        onClick={ e => {e.stopPropagation()} }
                                                 />
                                             </div>
-                                            <div>
-                                                <p className={'text-white'}>Align content:</p>
-                                                <div className={'d-flex justify-content-around'}>
-                                                    <FaAlignLeft
-                                                        className={'cursor-pointer'}
-                                                        style={{ width: "40px", height: "40px", color: "white" }}
-                                                        onClick={() => editElementClassNames("text-start")}
-                                                    />
-                                                    <FaAlignCenter
-                                                        className={'cursor-pointer'}
-                                                        style={{ width: "40px", height: "40px", color: "white" }}
-                                                        onClick={() => editElementClassNames("text-center")}
-                                                    />
-                                                    <FaAlignRight
-                                                        className={'cursor-pointer'}
-                                                        style={{ width: "40px", height: "40px", color: "white" }}
-                                                        onClick={() => editElementClassNames("text-end")}
-                                                    />
-                                                </div>
-                                            </div>
                                         </>
-                                        :
-                                        ""
+                                }
+                                {
+                                    (editingTextSelected ||  editingBlockSelected) &&
+                                    <>
+                                        <div className={'mb-3'}>
+                                            <p className={'text-white'}>Align content:</p>
+                                            <div className={'d-flex justify-content-around'}>
+                                                <FaAlignLeft
+                                                    className={'cursor-pointer'}
+                                                    style={{ width: "40px", height: "40px", color: "white" }}
+                                                    onClick={() => editElementClassNames(list_of_text_alignment_classes,"text-start")}
+                                                />
+                                                <FaAlignCenter
+                                                    className={'cursor-pointer'}
+                                                    style={{ width: "40px", height: "40px", color: "white" }}
+                                                    onClick={() => editElementClassNames(list_of_text_alignment_classes, "text-center")}
+                                                />
+                                                <FaAlignRight
+                                                    className={'cursor-pointer'}
+                                                    style={{ width: "40px", height: "40px", color: "white" }}
+                                                    onClick={() => editElementClassNames(list_of_text_alignment_classes, "text-end")}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className={'mb-3'}>
+                                            <p className={'text-white'}>Color:</p>
+                                            <DropdownButton
+                                                variant={"info"}
+                                                drop={"end"}
+                                                title={editingElementGetTextColor()}
+                                            >
+                                                {list_of_colors.map(color =>
+                                                    <Dropdown.Item
+                                                        onClick={() => {editTextColorToEditingElement(color)}}
+                                                    >
+                                                        {
+                                                            color === "default" ?
+                                                                <p className={'mb-0'}>default</p>
+                                                                :
+                                                                <Badge bg={color} style={{width: "10px", height: "18px", border: "1px solid lightgray"}} > </Badge>
+                                                        }
+                                                    </Dropdown.Item>
+                                                )}
+                                            </DropdownButton>
+                                        </div>
+                                        <div className={'mb-3'}>
+                                            <p className={'text-white'}>Background color:</p>
+                                            <Dropdown
+                                                drop={"end"}
+                                            >
+                                                <Dropdown.Toggle
+                                                    variant={"info"}
+                                                >
+                                                    {editingElementGetBackgrounColor()}
+                                                </Dropdown.Toggle>
+
+                                                <Dropdown.Menu>
+                                                    {list_of_colors.map(color =>
+                                                        <Dropdown.Item
+                                                            onClick={() => {editBackgroundColorToEditingElement(color)}}
+                                                        >
+                                                            {color === "default" ?
+                                                                <p className={'mb-0'}>default</p>
+                                                                :
+                                                                <Badge bg={color} style={{width: "10px", height: "18px", border: "1px solid lightgray"}} > </Badge>
+                                                            }
+                                                        </Dropdown.Item>
+                                                    )}
+                                                </Dropdown.Menu>
+
+                                            </Dropdown>
+                                        </div>
+                                    </>
+                                }
+                                {
+                                    editingImgSelected &&
+                                    <>
+                                        <p className={'text-white'}>Gallery:</p>
+                                        <div onClick={openGalleryModal} className={'position-relative'}>
+                                            <div className={'d-flex flex-wrap mb-3 cursor-pointer'}
+                                                 style={{maxWidth: "289px", background: "white", borderRadius: "6px", filter: "blur(1px)"}}
+                                            >
+                                                {
+                                                    [
+                                                        {name: "slider_1.jpg"},
+                                                        {name: "slider_2.jpg"},
+                                                        {name: "slider_3.jpg"},
+                                                        {name: "slider_4.jpg"},
+                                                    ].map(img=>
+                                                        <div key={img.name} className={'col-6 text-center p-1'}>
+                                                            <img style={{borderRadius: "4px"}} width={120} height={80} src={process.env.REACT_APP_URL_API + "/gallery/" + img.name} />
+                                                        </div>
+                                                    )
+                                                }
+                                            </div>
+                                            <div className={'position-absolute'} style={{top: "42%", left: "27%"}}>
+                                                <button type="button" className="btn btn-success no-radius d-inline-flex align-items-center">
+                                                    <span>Select image</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p className={'text-white'}>Add image:</p>
+                                        <div style={menu_item} >
+                                                <input className={'form-control'}
+                                                       style={{maxWidth: "237px"}}
+                                                       type={"file"}
+                                                       accept="image/png, image/gif, image/jpeg"
+                                                      onChange={ e => selectFile(e)  }
+                                                      onClick={ e => {e.stopPropagation()} }
+                                                />
+                                        </div>
+                                        <div className={'d-flex justify-content-center'}>
+                                            <button type="button" className="btn btn-success no-radius d-inline-flex align-items-center" onClick={
+                                                () => { submitFile() }
+                                            }>
+                                                <span>Submit</span><span style={{ paddingLeft: "6px" }}><AiOutlinePlus style={{ display: "block" }} /></span>
+                                            </button>
+                                        </div>
+                                    </>
                                 }
                             </div>
                     }
@@ -478,18 +705,43 @@ const SiteEditor = () => {
                                     if (e.target.dataset.id == previousEditingElement.id) {
                                         e.target.className.replace('admin-editing', '')
                                         setEditingTextSelected(false)
+                                        setEditingBlockSelected(false)
+                                        setEditingImgSelected(false)
                                         setEditingElement({})
                                         setPreviousEditingElement({})
                                     } else {
-                                        console.log("previousEditingElement")
-                                        console.log(previousEditingElement)
 
-                                        if (Object.keys(previousEditingElement).length !== 0) {
-                                            previousEditingElement.target.className = previousEditingElement.target.className.replace('admin-editing', "")
+                                        let object_to_edit = {}
+
+                                        // console.log(e.target.dataset)
+
+                                        if (e.target.dataset.customType === "text") {
+                                            object_to_edit = {id: e.target.dataset.id, text: e.target.innerText, className: e.target.className}
+                                            setEditingImgSelected(false)
+                                            setEditingBlockSelected(false)
+                                            setEditingTextSelected(true)
+                                        } else if (e.target.dataset.customType === "img") {
+                                            object_to_edit = {id: e.target.dataset.id, className: e.target.className}
+                                            setEditingTextSelected(false)
+                                            setEditingBlockSelected(false)
+                                            setEditingImgSelected(true)
+                                        } else if (e.target.dataset.customType === "block") {
+                                            object_to_edit = {id: e.target.dataset.id, className: e.target.className}
+                                            setEditingImgSelected(false)
+                                            setEditingTextSelected(false)
+                                            setEditingBlockSelected(true)
                                         }
 
-                                        setEditingTextSelected(true)
-                                        setEditingElement({id: e.target.dataset.id, text: e.target.innerText})
+                                        console.log(object_to_edit)
+
+                                        if (Object.keys(object_to_edit).length === 0) {
+                                            setEditingImgSelected(false)
+                                            setEditingTextSelected(false)
+                                            setEditingBlockSelected(false)
+                                        }
+
+                                        setEditingElement(object_to_edit)
+
                                         setPreviousEditingElement({id: e.target.dataset.id, target: e.target})
                                         e.target.className += " admin-editing";
                                     }

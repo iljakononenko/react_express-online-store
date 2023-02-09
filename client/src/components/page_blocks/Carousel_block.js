@@ -11,9 +11,9 @@ const CarouselBlock = ({props}) => {
         <Carousel>
             {
                 props.map(prop =>
-                <Carousel.Item>
-                    {renderCoreComponent(prop.id, prop.component_id, prop.props)}
-                </Carousel.Item>
+                    <Carousel.Item key={prop.key}>
+                        {renderCoreComponent(prop.key, prop.component_id, prop.props)}
+                    </Carousel.Item>
                 )
             }
         </Carousel>

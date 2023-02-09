@@ -26,7 +26,6 @@ import Cart from "../pages/Cart";
 import UserPanel from "../pages/UserPanel";
 
 export const basicBlocks = [
-    {block_id: 0, block_name: "Header", icon: <FaBars size={36} />},
     {block_id: 1, block_name: "Carousel", icon: <FaTv size={36} />},
     {block_id: 2, block_name: "Products list", icon: <FaList size={36} />},
     {block_id: 3, block_name: "Login", icon: <FaRegAddressCard size={36} />},
@@ -37,7 +36,6 @@ export const basicBlocks = [
     {block_id: 8, block_name: "Jumbotron", icon: <VscVersions size={36} />},
     {block_id: 9, block_name: "Pricing", icon: <VscVersions size={36} />},
     {block_id: 10, block_name: "Product", icon: <VscVersions size={36} />},
-    {block_id: 11, block_name: "Footer", icon: <VscVersions size={36} />},
 ]
 
 export const getBasicBlock = (component_id, key, props) => {
@@ -77,7 +75,7 @@ export const getBasicBlock = (component_id, key, props) => {
 export const renderCoreComponent = (key, component_id, props) => {
     switch (component_id){
         case 0:
-            return <DivBlock key={key} className={props.className} children={props.children} />
+            return <DivBlock key={key} keyProp={key} className={props.className} children={props.children} />
         case 1:
             return <Text key={key} keyProp={key} text={props.text} className={props.className} type={props.type} />
         case 2:

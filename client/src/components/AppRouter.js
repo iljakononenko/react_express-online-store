@@ -29,8 +29,8 @@ const AppRouter = () => {
 
                 // extracting header and footer from website obtained
                 let page_template = obtained_pages.find(page => page.url === "0")
-                console.log("page_template")
-                console.log(page_template)
+                // console.log("page_template")
+                // console.log(page_template)
                 let header1 = page_template.webpage_components.find(component => component.component_id === 0)
                 header1.nodes = JSON.parse(header1.nodes)
                 setHeader(header1);
@@ -55,7 +55,7 @@ const AppRouter = () => {
 
                 }
 
-                console.log(header)
+                // console.log(header)
 
                 // console.log(obtained_pages)
                 admin.setCurrentPages(obtained_pages)
@@ -73,7 +73,7 @@ const AppRouter = () => {
         return getBasicBlock(component_id, key, nodes);
     }
 
-    console.log(header)
+    // console.log(header)
 
     return (
         <Switch>

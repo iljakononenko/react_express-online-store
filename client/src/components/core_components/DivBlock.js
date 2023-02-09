@@ -1,9 +1,14 @@
 import React from 'react';
 import {renderCoreComponent} from "../../utils/components_map";
 
-const DivBlock = ({className="", children}) => {
+const DivBlock = ({keyProp, className="", children}) => {
+
     return (
-        <div className={className}>
+        <div className={className}
+            key={keyProp}
+             data-id={keyProp}
+             data-custom-type={"block"}
+        >
             {
                 children.length > 0 ?
                     children.map(child => {

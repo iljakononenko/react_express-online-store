@@ -11,3 +11,16 @@
     color: #2470dc;
     background-color: #f0f2f5;
 }
+
+.gallery-variant {
+    height: 140px;
+    padding: 24px;
+    border: 1px solid #ddd;
+    transition: background-color ease-in-out 0.2s;
+}
+
+.gallery-variant.selected,
+.gallery-variant:hover {
+    box-shadow: rgb(115, 240, 148) 0px 0px 25px 5px;
+    border: none;
+}
