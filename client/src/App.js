@@ -16,6 +16,7 @@ const App = observer(() => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
+        console.log("")
         isBaseInit().then(({data}) => {
             if (!data.isInit) {
                 initBase().then(data => {
