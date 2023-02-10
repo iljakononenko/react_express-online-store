@@ -1,7 +1,7 @@
 const ApiError = require('../error/ApiError')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {User, Cart, UserData, Order, OrderProduct, ShopItem} = require('../models/models')
+const {User, Cart, UserData, Order, OrderProduct, ShopItem, ContactForm} = require('../models/models')
 
 const generateJwt = (id, email, role) => {
     return jwt.sign(
@@ -162,6 +162,22 @@ class UserController {
         })
 
         return res.json(orders);
+    }
+
+    async receiveForm(req, res, next) {
+
+        const {name, email, message} = req.body
+
+        await ContactForm.create({name, email, message, subdomain: req.systemSource})
+
+        return res.json({})
+    }
+
+    async getForms(req, res, next) {
+
+        const forms = await ContactForm.findAll({where: {subdomain: req.systemSource}})
+
+        return res.json(forms)
     }
 }
 

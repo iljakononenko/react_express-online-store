@@ -6,6 +6,8 @@ const getSystemSourceMiddleware = require("../midlleware/getSystemSourceMiddlewa
 
 router.post('/registration', getSystemSourceMiddleware, UserController.registration)
 router.post('/login', getSystemSourceMiddleware, UserController.login)
+router.post('/forms', getSystemSourceMiddleware, UserController.receiveForm)
+router.get('/forms', getSystemSourceMiddleware, UserController.getForms)
 router.get('/auth', authMiddleware, UserController.check)
 router.get('/data', authMiddleware, UserController.getUserData)
 router.get('/orders', authMiddleware, UserController.getAllOrders)

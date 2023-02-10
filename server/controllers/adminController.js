@@ -22,7 +22,7 @@ class AdminController {
     async isBaseInit(req, res, next) {
         const existing_system = await ServiceWebSites.findOne({where: {id: 1}});
 
-        res.send({isInit: existing_system != null})
+        res.send({data: {isInit: existing_system != null}})
     }
 
     async getGalleryCount(req, res, next) {
@@ -32,11 +32,21 @@ class AdminController {
     }
 
     async initBase(req, res, next) {
-        const existing_system = await ServiceWebSites.findOne({where: {id: 1}});
+        try {
+            const existing_system = await ServiceWebSites.findOne({where: {id: 1}});
 
-        if (!existing_system) {
-            // console.log(this)
-            await (new AdminController).createSite(req, res)
+            if (!existing_system) {
+                // console.log(this)
+                await (new AdminController).createSite(req, res)
+
+            } else {
+                res.send({data: {status: 200, message: "success"}})
+            }
+
+
+        } catch (err) {
+            console.log(err)
+            return next(ApiError.internal("An error occurred. Please refresh page and try again"))
         }
     }
 
@@ -59,61 +69,72 @@ class AdminController {
         return res.json({token})
     }
 
-    async createSite(req, res) {
-        const {siteName, pages, layout_type_id} = req.body;
-        const subdomain = siteName.toLowerCase().replaceAll(" ", "");
+    async createSite(req, res, next) {
+        try {
+            const {siteName, pages, layout_type_id, subdomain} = req.body;
+            // const subdomain = siteName.toLowerCase().replaceAll(" ", "");
 
-        // console.log(req.body)
+            const existing_website = await ServiceWebSites.findOne({where: {subdomain: subdomain}})
 
-        // return res.send({test: 'test'})
-
-        const new_site = await ServiceWebSites.create(
-            {
-                name: siteName,
-                subdomain: subdomain,
-                layout_type_id: layout_type_id,
-                system_id: 1
+            if (existing_website) {
+                return next(ApiError.badRequest("Service with given subdomain already exists!"))
             }
-        );
 
-        for (let page of pages) {
-            let new_page = await WebPage.create({id: page.id ,name: page.name, url: page.url, serviceWebSiteId: new_site.id})
+            // console.log(req.body)
 
-            console.log(new_page.id)
+            // return res.send({test: 'test'})
 
-            for (let component of page.webpage_components) {
-                await WebPageComponent.create({
-                    key: component.key,
-                    component_id: component.component_id,
-                    component_name: component.component_name,
-                    order: component.order,
-                    nodes: JSON.stringify(component.nodes),
-                    webpageId: new_page.id
-                })
+            const new_site = await ServiceWebSites.create(
+                {
+                    name: siteName,
+                    subdomain: subdomain,
+                    layout_type_id: layout_type_id,
+                    system_id: 1
+                }
+            );
+
+            for (let page of pages) {
+                let new_page = await WebPage.create({id: page.id ,name: page.name, url: page.url, serviceWebSiteId: new_site.id})
+
+                console.log(new_page.id)
+
+                for (let component of page.webpage_components) {
+                    await WebPageComponent.create({
+                        key: component.key,
+                        component_id: component.component_id,
+                        component_name: component.component_name,
+                        order: component.order,
+                        nodes: JSON.stringify(component.nodes),
+                        webpageId: new_page.id
+                    })
+                }
             }
+
+            if (Number(layout_type_id) === 2) {
+                let lenovo_brand = await Brand.create({name: "Lenovo", subdomain: subdomain});
+                let apple_brand = await Brand.create({name: "Apple", subdomain: subdomain});
+                let laptop_type = await Type.create({name: "Laptop", subdomain: subdomain});
+                let smartphone_type = await Type.create({name: "Smartphone", subdomain: subdomain});
+
+                await ShopItem.create({name: "Lenovo Legion 5",price: 4999,brandId: lenovo_brand.id ,typeId: laptop_type.id, img: lenovo_img, subdomain: subdomain})
+                await ShopItem.create({name: "Lenovo Legion 7",price: 5699,brandId: lenovo_brand.id ,typeId: laptop_type.id, img: lenovo_img, subdomain: subdomain})
+                await ShopItem.create({name: "Lenovo Legion y70",price: 3499,brandId: lenovo_brand.id ,typeId: smartphone_type.id, img: lenovo_phone_img, subdomain: subdomain})
+                await ShopItem.create({name: "Apple Iphone 14 Pro", price: 7659,brandId: apple_brand.id ,typeId: smartphone_type.id, img: iphone_img, subdomain: subdomain})
+                await ShopItem.create({name: "Apple Iphone 14 Pro Max", price: 8479,brandId: apple_brand.id, typeId: smartphone_type.id, img: iphone_img, subdomain: subdomain})
+                await ShopItem.create({name: "Apple MacBook Air", price: 10479,brandId: apple_brand.id, typeId: laptop_type.id, img: iphone_img, subdomain: subdomain})
+                await ShopItem.create({name: "Apple MacBook Pro", price: 12889,brandId: apple_brand.id, typeId: laptop_type.id, img: macbook_img, subdomain: subdomain})
+            }
+
+            let new_site_with_pages = await ServiceWebSites.findOne({
+                where: {id: new_site.id},
+                include: [{model: WebPage, as: "webpages", include: [{model: WebPageComponent, as: "webpage_components"}] }]
+            })
+
+            return res.send({status: 200, message: "success", editor_id: new_site.id, website: new_site_with_pages});
+        } catch (err) {
+            console.log(err)
+            return next(ApiError.internal("An error occurred. Please refresh page and try again"))
         }
-
-        if (Number(layout_type_id) === 2) {
-            let lenovo_brand = await Brand.create({name: "Lenovo", subdomain: subdomain});
-            let apple_brand = await Brand.create({name: "Apple", subdomain: subdomain});
-            let laptop_type = await Type.create({name: "Laptop", subdomain: subdomain});
-            let smartphone_type = await Type.create({name: "Smartphone", subdomain: subdomain});
-
-            await ShopItem.create({name: "Lenovo Legion 5",price: 4999,brandId: lenovo_brand.id ,typeId: laptop_type.id, img: lenovo_img, subdomain: subdomain})
-            await ShopItem.create({name: "Lenovo Legion 7",price: 5699,brandId: lenovo_brand.id ,typeId: laptop_type.id, img: lenovo_img, subdomain: subdomain})
-            await ShopItem.create({name: "Lenovo Legion y70",price: 3499,brandId: lenovo_brand.id ,typeId: smartphone_type.id, img: lenovo_phone_img, subdomain: subdomain})
-            await ShopItem.create({name: "Apple Iphone 14 Pro", price: 7659,brandId: apple_brand.id ,typeId: smartphone_type.id, img: iphone_img, subdomain: subdomain})
-            await ShopItem.create({name: "Apple Iphone 14 Pro Max", price: 8479,brandId: apple_brand.id, typeId: smartphone_type.id, img: iphone_img, subdomain: subdomain})
-            await ShopItem.create({name: "Apple MacBook Air", price: 10479,brandId: apple_brand.id, typeId: laptop_type.id, img: iphone_img, subdomain: subdomain})
-            await ShopItem.create({name: "Apple MacBook Pro", price: 12889,brandId: apple_brand.id, typeId: laptop_type.id, img: macbook_img, subdomain: subdomain})
-        }
-
-        let new_site_with_pages = await ServiceWebSites.findOne({
-            where: {id: new_site.id},
-            include: [{model: WebPage, as: "webpages", include: [{model: WebPageComponent, as: "webpage_components"}] }]
-        })
-
-        return res.send({status: 200, message: "success", editor_id: new_site.id, website: new_site_with_pages});
     }
 
     async updateSite(req, res, next) {

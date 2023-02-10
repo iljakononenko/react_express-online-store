@@ -59,3 +59,13 @@ export const changeUserData = async (userData) => {
     const {data} = await $authHost.post('/api/user/changeUserData', {userData})
     return data;
 }
+
+export const sendContactForm = async (formData) => {
+    const {data} = await $host.post('api/user/forms', formData)
+    return data;
+}
+
+export const fetchContactForms = async () => {
+    const {data} = await $host.get('api/user/forms')
+    return data;
+}

@@ -1,6 +1,9 @@
 import React from "react";
 
 const Anchor = ({keyProp, text = "input text", className="", type, url}) => {
+
+    // console.log(url)
+
     switch (type) {
         case 0:
             return <a

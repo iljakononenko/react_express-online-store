@@ -22,6 +22,10 @@ export default class ItemStore {
     }
 
     setItems(items) {
+        for(let item of items) {
+            item.type = this.types.find(type => type.id === item.typeId)
+            item.brand = this.brands.find(brand => brand.id === item.brandId)
+        }
         this._items = items
     }
 

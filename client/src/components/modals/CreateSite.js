@@ -13,6 +13,7 @@ import {fetchBrands, fetchItems, fetchTypes} from "../../http/itemApi";
 const CreateSite = observer(({show, onHide}) => {
 
     const [siteName, setSiteName] = useState('');
+    const [siteSubDomain, setSiteSubDomain] = useState('');
     const [siteVariant, setSiteVariant] = useState({});
     const history = useHistory();
     const {item, admin} = useContext(Context)
@@ -25,26 +26,26 @@ const CreateSite = observer(({show, onHide}) => {
     const addSite = async () => {
         // add checking by already existing sites and subdomains
         let flag = true;
-        if (Object.keys(siteVariant).length === 0 || siteName === "") {
+        if (Object.keys(siteVariant).length === 0 || siteSubDomain.trim() === "" || siteSubDomain.trim() === "") {
             flag = false;
             alert("Please select website type and write a name")
         }
-        if (/[^a-zA-Z0-9 ]/.test(siteName)) {
+        if (/[^a-zA-Z0-9 ]/.test(siteSubDomain)) {
             flag = false;
-            alert("Site name should consist only of numbers and letters!")
+            alert("Site subdomain should consist only of numbers and letters!")
         }
-        if (siteName === "localhost") {
+        if (siteSubDomain === "localhost") {
             flag = false;
-            alert("Please name site differently!")
+            alert("Please input different domain name!")
         }
         if (flag) {
-            createSite( siteName, siteVariant.pages, siteVariant.id).then( async data => {
+            try {
+                const data = await createSite( siteName, siteVariant.pages, siteVariant.id, siteSubDomain)
+
                 setSiteName('')
                 onHide()
 
                 console.log(data)
-
-                admin.setCurrentPages(JSON.parse(data.website.pages))
 
                 admin.setCurrentSiteId(data.website.id)
                 admin.setCurrentSiteName(data.website.name)
@@ -60,7 +61,16 @@ const CreateSite = observer(({show, onHide}) => {
                 })
 
                 history.push(ADMIN_ROUTE)
-            })
+            } catch (err) {
+                if (err.response != null) {
+                    alert(err.response.data.message)
+                } else {
+                    console.log(err)
+                }
+
+            }
+
+
         }
     }
 
@@ -78,9 +88,14 @@ const CreateSite = observer(({show, onHide}) => {
             </Modal.Header>
 
             <Modal.Body>
-                <Form className={'col-6 mx-auto'}>
-                    <Form.Control placeholder={"Enter site name"} className={'text-center'} value={siteName} onChange={e => setSiteName(e.target.value)} />
-                </Form>
+                <div className={'d-flex'}>
+                    <Form className={'col-5 mx-auto'}>
+                        <Form.Control placeholder={"Enter site name"} className={'text-center'} value={siteName} onChange={e => setSiteName(e.target.value)} />
+                    </Form>
+                    <Form className={'col-5 mx-auto'}>
+                        <Form.Control placeholder={"Enter site subdomain"} className={'text-center'} value={siteSubDomain} onChange={e => setSiteSubDomain(e.target.value)} />
+                    </Form>
+                </div>
                 <div className={'d-flex flex-wrap my-3'}>
 
                     {

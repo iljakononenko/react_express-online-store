@@ -20,7 +20,7 @@ export const shop_starting_elements = [
                 "component_id": 11,
                 "component_name": "Footer",
                 "order": 99999999,
-                "nodes": []
+                "nodes": default_nodes[11]
             },
         ]
     },
@@ -118,13 +118,6 @@ export const single_page_starting_elements = [
         "webpage_components": [
             {
                 "key": uuid.v4(),
-                "component_id": 0,
-                "component_name": "Header",
-                "order": 1,
-                "nodes": default_nodes[0]
-            },
-            {
-                "key": uuid.v4(),
                 "component_id": 1,
                 "component_name": "Slider",
                 "order": 2,
@@ -135,6 +128,13 @@ export const single_page_starting_elements = [
                 "component_id": 2,
                 "component_name": "Products",
                 "order": 3,
+                "nodes": []
+            },
+            {
+                "key": uuid.v4(),
+                "component_id": 14,
+                "component_name": "Contact form",
+                "order": 4,
                 "nodes": []
             },
         ]

@@ -17,7 +17,7 @@ import {FaDoorOpen, FaShoppingCart, FaUserAlt} from "react-icons/fa";
 
 const NavBar = observer(( {props} ) => {
 
-    const {user} = useContext(Context)
+    const {user, admin} = useContext(Context)
     const history = useHistory()
 
     const [isAuthUser, setIsAuthUser] = useState(false);
@@ -33,15 +33,15 @@ const NavBar = observer(( {props} ) => {
         }
     }
 
-    console.log(props)
+    // console.log(props)
 
     return (
         <Navbar bg="dark" variant="dark">
             <Container>
                 <NavLink style={{color: "white", textDecoration: "none"}} data-custom-type={"text"} data-id={props[0].id} to={ isRealPage ? SHOP_ROUTE : "#"}>{props[0] != null ? props[0].props.text : "ProdSell"}</NavLink>
-                {(isRealPage && user.isAuth) || isAuthUser ?
+                {(isRealPage && user.isAuth) || isAuthUser?
                     <div className={'d-flex align-items-center'}>
-                        <p className={'mb-0 text-white me-2'}>Hello!</p>
+                        <p className={'mb-0 text-white me-2'} data-custom-type={"text"} data-id={props[0].id}>{props[0] != null ? props[0].props.text : "Hello!"}</p>
                         <Navbar.Toggle className={"ms-auto"} style={{color: "white"}} aria-controls="navbar-dark-example"/>
                         <Navbar.Collapse id="navbar-dark-example">
                             <Nav>

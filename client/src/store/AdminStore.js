@@ -7,6 +7,8 @@ export default class AdminStore {
         this._currentSiteId = 0;
         this._currentSiteName = "";
         this._currentPages = [];
+        this._isBaseInitFinished = false;
+        this._layoutTypeId = 0;
         makeAutoObservable(this);
     }
 
@@ -30,6 +32,14 @@ export default class AdminStore {
         this._currentPages = pages;
     }
 
+    setIsBaseInitFinished(flag) {
+        this._isBaseInitFinished = flag
+    }
+
+    setLayoutTypeId(typeId) {
+        this._layoutTypeId = typeId
+    }
+
     get isAuth() {
         return this._isAuth;
     }
@@ -48,5 +58,13 @@ export default class AdminStore {
 
     get currentPages() {
         return this._currentPages;
+    }
+
+    get isBaseInitFinished() {
+        return this._isBaseInitFinished
+    }
+
+    get layoutTypeId() {
+        return this._layoutTypeId;
     }
 }

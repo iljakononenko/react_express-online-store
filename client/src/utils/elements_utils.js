@@ -9,7 +9,7 @@ export const getTextObject = (text, className, type) => {
 }
 
 export const getAnchorObject = (text, className, type, url) => {
-    return {component_id: 2, key: uuid.v4(), props: {text: text, className: className, type: type, url: url}}
+    return {component_id: 2, key: uuid.v4(), props: {text: text, className: className, url: url, type: type }}
 }
 
 export const getImgObject = (className, src, alt, type = 0) => {

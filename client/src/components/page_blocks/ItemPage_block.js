@@ -63,7 +63,7 @@ const ItemPage = observer(({props}) => {
                         className="d-flex flex-column align-items-center justify-content-around ms-auto"
                         style={{width: 300, height: 300, fontSize: 32, border: '5px solid lightgrey'}}
                     >
-                        <h3>{item.price} zł</h3>
+                        <h3>{item.price} $</h3>
                         <Button
                             variant={"outline-dark"}
                             onClick={addToCart}

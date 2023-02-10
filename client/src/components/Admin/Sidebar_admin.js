@@ -8,7 +8,7 @@ import {
     ADMIN_SETTINGS_ROUTE,
     EDITOR_ROUTE, MANAGER_ROUTE
 } from "../../utils/consts";
-import {FaColumns, FaDoorOpen, FaFile, FaHome, FaListUl, FaTools, FaUsers} from "react-icons/fa";
+import {FaColumns, FaDoorOpen, FaFile, FaHome, FaListUl, FaTools, FaUsers, FaWpforms} from "react-icons/fa";
 import {observer} from "mobx-react-lite";
 import {Context} from "../../index";
 
@@ -50,8 +50,8 @@ const SidebarAdmin = observer(() => {
                 <ul className="nav flex-column">
                     <li className="nav-item">
                         <NavLink className="nav-link" to={ADMIN_ROUTE}>
-                            <FaHome />
-                            Dashboard
+                            <FaWpforms />
+                            Forms
                         </NavLink>
                     </li>
                     <li className="nav-item">
@@ -78,12 +78,12 @@ const SidebarAdmin = observer(() => {
                             Layout Editor
                         </NavLink>
                     </li>
-                    <li className="nav-item">
-                        <NavLink className="nav-link" to={ADMIN_SETTINGS_ROUTE}>
-                            <FaTools />
-                            Settings
-                        </NavLink>
-                    </li>
+                    {/*<li className="nav-item">*/}
+                    {/*    <NavLink className="nav-link" to={ADMIN_SETTINGS_ROUTE}>*/}
+                    {/*        <FaTools />*/}
+                    {/*        Settings*/}
+                    {/*    </NavLink>*/}
+                    {/*</li>*/}
                     <li className="nav-item">
                         <div className="nav-link cursor-pointer"
                              onClick={() => logOut()}

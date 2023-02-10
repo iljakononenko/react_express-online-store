@@ -8,7 +8,7 @@ import {check, checkAdmin} from "./http/userApi";
 import {Spinner} from "react-bootstrap";
 import "./App.css";
 import {fetchBrands, fetchItems, fetchTypes} from "./http/itemApi";
-import {initBase} from "./http/adminApi";
+import {initBase, isBaseInit} from "./http/adminApi";
 
 const App = observer(() => {
 
@@ -16,10 +16,17 @@ const App = observer(() => {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        initBase().then(() => {
-            // console.log('test')
+        isBaseInit().then(({data}) => {
+            if (!data.isInit) {
+                initBase().then(data => {
+                    console.log(data)
+                    admin.setIsBaseInitFinished(true)
+                })
+            } else {
+                admin.setIsBaseInitFinished(true)
+            }
         })
-    })
+    }, [])
 
     useEffect(() => {
         fetchTypes().then(data => item.setTypes(data))

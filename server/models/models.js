@@ -125,6 +125,14 @@ const OrderProduct = sequelize.define('order_product', {
     quantity: {type: DataTypes.INTEGER},
 })
 
+const ContactForm = sequelize.define('contact_form', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING},
+    email: {type: DataTypes.STRING},
+    message: {type: DataTypes.TEXT},
+    subdomain: {type: DataTypes.STRING},
+})
+
 User.hasOne(Cart)
 Cart.belongsTo(User)
 
@@ -185,5 +193,6 @@ module.exports = {
     WebPage,
     WebPageComponent,
     Order,
-    OrderProduct
+    OrderProduct,
+    ContactForm
 }

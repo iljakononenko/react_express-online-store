@@ -3,7 +3,18 @@ import CarouselBlock from "../components/page_blocks/Carousel_block";
 import ProductsBlock from "../components/page_blocks/Products_block";
 import AuthBlock from "../components/page_blocks/Auth_block";
 import Hero from "../components/page_blocks/Heroes/Hero";
-import {FaBars, FaList, FaRegAddressCard, FaRegFileCode, FaTv} from "react-icons/fa";
+import {
+    FaBars, FaGripVertical,
+    FaImages,
+    FaKey,
+    FaLaptop,
+    FaLayerGroup,
+    FaList,
+    FaMap,
+    FaRegAddressCard,
+    FaRegFileCode, FaSolarPanel, FaTh,
+    FaTv, FaWpforms
+} from "react-icons/fa";
 import React from "react";
 import {VscVersions} from "react-icons/vsc";
 import Registration_block from "../components/page_blocks/Registration_block";
@@ -24,18 +35,20 @@ import ListBlock from "../components/core_components/ListBlock";
 import ListElement from "../components/core_components/ListElement";
 import Cart from "../pages/Cart";
 import UserPanel from "../pages/UserPanel";
+import Contactform from "../components/page_blocks/Contactform";
 
 export const basicBlocks = [
-    {block_id: 1, block_name: "Carousel", icon: <FaTv size={36} />},
+    {block_id: 1, block_name: "Carousel", icon: <FaImages size={36} />},
     {block_id: 2, block_name: "Products list", icon: <FaList size={36} />},
-    {block_id: 3, block_name: "Login", icon: <FaRegAddressCard size={36} />},
+    {block_id: 3, block_name: "Login", icon: <FaKey size={36} />},
     {block_id: 4, block_name: "Registration", icon: <FaRegAddressCard size={36} />},
-    {block_id: 5, block_name: "Item info", icon: <FaRegAddressCard size={36} />},
-    {block_id: 6, block_name: "Hero", icon: <VscVersions size={36} />},
-    {block_id: 7, block_name: "Features", icon: <VscVersions size={36} />},
-    {block_id: 8, block_name: "Jumbotron", icon: <VscVersions size={36} />},
+    {block_id: 5, block_name: "Item info", icon: <FaLaptop size={36} />},
+    {block_id: 6, block_name: "Hero", icon: <FaTv size={36} />},
+    {block_id: 7, block_name: "Features", icon: <FaLayerGroup size={36} />},
+    {block_id: 8, block_name: "Jumbotron", icon: <FaMap size={36} />},
     {block_id: 9, block_name: "Pricing", icon: <VscVersions size={36} />},
-    {block_id: 10, block_name: "Product", icon: <VscVersions size={36} />},
+    {block_id: 10, block_name: "Product presentation", icon: <FaGripVertical size={36} />},
+    {block_id: 14, block_name: "Contact form", icon: <FaWpforms size={36} />},
 ]
 
 export const getBasicBlock = (component_id, key, props) => {
@@ -68,6 +81,8 @@ export const getBasicBlock = (component_id, key, props) => {
             return <UserPanel />
         case 13:
             return <Cart />
+        case 14:
+            return <Contactform />
 
     }
 }

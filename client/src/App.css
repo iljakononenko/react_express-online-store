@@ -38,3 +38,7 @@ input[type=number] {
     box-shadow: rgb(255 213 3) 0px 0px 15px 5px;
 }
 
+a {
+    text-decoration: none;
+}
+
